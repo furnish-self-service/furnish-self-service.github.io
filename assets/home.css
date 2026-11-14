@@ -21,7 +21,7 @@ section {
 .section-head p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 1.1rem;
+  font-size: var(--text-intro);
 }
 
 /* Hero: the message, then the real app, larger than the column it starts in. */
@@ -41,7 +41,7 @@ section {
   border-radius: 999px;
   background: var(--highlight-soft);
   color: var(--ink-soft);
-  font-size: 0.85rem;
+  font-size: var(--text-small);
   font-weight: 600;
 }
 .status .icon {
@@ -56,7 +56,7 @@ section {
 .lead {
   margin: 1.4rem 0 2rem;
   color: var(--ink-soft);
-  font-size: 1.15rem;
+  font-size: var(--text-intro);
   max-width: 34rem;
 }
 .cta {
@@ -87,7 +87,7 @@ section {
   border-radius: 12px 12px 0 0;
   background: color-mix(in srgb, var(--code-bg) 88%, var(--accent));
   color: #9dc7c1;
-  font: 0.8rem var(--font-mono);
+  font: var(--text-small) var(--font-mono);
 }
 .code-card pre {
   margin: 0;
@@ -126,7 +126,7 @@ section {
   border-radius: 50%;
   background: var(--accent-soft);
   color: var(--accent-ink);
-  font: 700 0.85rem var(--font-display);
+  font: 700 var(--text-small) var(--font-display);
 }
 .steps strong {
   color: var(--ink);
@@ -154,7 +154,7 @@ section {
   align-items: center;
   gap: 0.55rem;
   margin: 0;
-  font-size: 1.3rem;
+  font-size: var(--text-h3);
 }
 .feature h3 .icon,
 .item > .icon {
@@ -201,7 +201,7 @@ section {
 }
 .item h3 {
   margin: 0.2rem 0 0.3rem;
-  font-size: 1.12rem;
+  font-size: var(--text-h3);
 }
 .item p {
   margin: 0;
@@ -228,7 +228,7 @@ section {
   background: var(--surface);
   color: var(--ink-soft);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: var(--text-small);
   cursor: pointer;
 }
 .tabs input:checked + label {
@@ -257,6 +257,9 @@ section {
 .tabs .panel > p {
   margin: 0 0 0.6rem;
   color: var(--ink-soft);
+}
+.tabs .panel > .download {
+  margin-bottom: 0.9rem;
 }
 .tabs .panel > pre {
   margin: 0;

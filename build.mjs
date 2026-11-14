@@ -28,8 +28,18 @@ function icons(html) {
   );
 }
 
+/** Screenshots on phones: where `images/<x>-mobile.webp` exists (a crop of what matters), phones
+ *  get it instead of the whole window, whose text would be too small to read. */
+function mobileImages(html, dir) {
+  return html.replace(/<img src="images\/([a-z-]+)\.webp"([^>]*)>/g, (img, name, rest) => {
+    if (rest.includes('data-picture') || !existsSync(`${dir}/${name}-mobile.webp`)) return img;
+    return `<picture><source srcset="images/${name}-mobile.webp" media="(max-width: 40rem)" />${img}</picture>`;
+  });
+}
+
 // The homepage, with the latest version's screenshots.
-writeFileSync(`${out}/index.html`, icons(readFileSync('src/index.html', 'utf8')));
+const images = `${checkout(latest)}/docs/site/images`;
+writeFileSync(`${out}/index.html`, mobileImages(icons(readFileSync('src/index.html', 'utf8')), images));
 cpSync(`${checkout(latest)}/docs/site/images`, `${out}/images`, { recursive: true });
 
 // The docs: one tree per version; /docs/ goes to the latest.
@@ -64,7 +74,7 @@ for (const version of versions) {
       .replace('{{versions}}', options)
       .replace('{{content}}', content)
       .replace('{{source}}', `https://github.com/furnish-self-service/furnish/blob/${version.ref}/docs/site/${page.slug}.md`);
-    writeFileSync(`${target}/${page.slug}.html`, icons(html));
+    writeFileSync(`${target}/${page.slug}.html`, mobileImages(icons(html), `${dir}/images`));
   }
 }
 const first = `docs/${latest.name}/index.html`;

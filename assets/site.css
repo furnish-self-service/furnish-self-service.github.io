@@ -32,6 +32,12 @@
   --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
   --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', Menlo, monospace;
+  /* One type scale for the homepage and the docs. */
+  --text-small: 0.875rem; /* captions, labels, tables' neighbours, footer */
+  --text: 1rem;
+  --text-intro: 1.125rem; /* the paragraph under a page or section title */
+  --text-h3: 1.2rem;
+  --text-code: 0.875rem; /* all code: inline, in tables and in blocks */
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -62,6 +68,9 @@
 }
 html {
   scroll-behavior: smooth;
+  /* No automatic text enlarging on phones (Chrome on Android, Safari on iOS in landscape). */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -72,7 +81,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font: 1rem/1.6 var(--font-body);
+  font: var(--text)/1.6 var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 a {
@@ -100,10 +109,14 @@ h3 {
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
+/* A fixed size, not em: nested (pre > code) or in smaller text it would shrink again. */
 code,
 pre {
   font-family: var(--font-mono);
-  font-size: 0.88em;
+  font-size: var(--text-code);
+}
+pre code {
+  font-size: inherit;
 }
 :not(pre) > code {
   padding: 0.1em 0.35em;
@@ -163,7 +176,7 @@ pre {
   border-radius: 10px;
   color: var(--ink-soft);
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: var(--text-small);
   text-decoration: none;
 }
 .topbar nav a:hover,
@@ -219,13 +232,13 @@ pre {
 figcaption {
   margin-top: 0.6rem;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: var(--text-small);
 }
 
 footer.site {
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--text-small);
 }
 footer.site .inner {
   display: flex;

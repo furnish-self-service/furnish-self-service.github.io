@@ -25,7 +25,7 @@
   <main>
     <section class="hero">
       <div class="hero-text">
-        <p class="status"><icon name="sparkles" />Alpha: Linux packages, no releases yet</p>
+        <p class="status"><icon name="sparkles" />Alpha: builds of the main branch, no releases yet</p>
         <h1>Your organization's app store, kept in git.</h1>
         <p class="lead">
           furnish shows your people a catalog of the apps you curate. They install, update and remove them with one
@@ -40,8 +40,10 @@
       </div>
       <figure class="window hero-shot">
         <picture>
+          <source srcset="images/discover-dark-mobile.webp" media="(max-width: 40rem) and (prefers-color-scheme: dark)" />
+          <source srcset="images/discover-mobile.webp" media="(max-width: 40rem)" />
           <source srcset="images/discover-dark.webp" media="(prefers-color-scheme: dark)" />
-          <img src="images/discover.webp" width="2360" height="1520" alt="The furnish app: a Discover page with apps recommended for designers above the full catalog of the example collection." />
+          <img data-picture src="images/discover.webp" width="2360" height="1520" alt="The furnish app: a Discover page with apps recommended for designers above the full catalog of the example collection." />
         </picture>
       </figure>
     </section>
@@ -165,15 +167,14 @@ inputs.furnish.url = "github:furnish-self-service/furnish";
 # configuration.nix, with furnish.nixosModules.default imported
 services.furnish.enable = true;</code></pre>
 <div class="panel" id="p-mac">
-  <p>There's no published build for macOS yet. Build it with Xcode's command line tools, Rust and Node.js:</p>
+  <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg"><icon name="download" />Download for Mac with Apple silicon</a></p>
+  <p>The alpha isn't signed by Apple yet, so macOS blocks it at first: open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. A new alpha means a new download; furnish doesn't update itself on macOS yet. For Intel Macs, build it with Xcode's command line tools, Rust and Node.js:</p>
 <pre><code>git clone https://github.com/furnish-self-service/furnish.git
-cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle
-open ../target/release/bundle/dmg/*.dmg</code></pre>
+cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre>
 </div>
 <div class="panel" id="p-win">
-  <p>There's no published build for Windows yet. Build it with Visual Studio's C++ build tools, Rust and Node.js, then run the installer from <code>target\release\bundle\msi</code>:</p>
-<pre><code>git clone https://github.com/furnish-self-service/furnish.git
-cd furnish\gui; npm ci; npm run bundle</code></pre>
+  <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-windows.msi"><icon name="download" />Download for Windows (64-bit)</a></p>
+  <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. A new alpha means a new download; furnish doesn't update itself on Windows yet.</p>
 </div>
       </div>
       <p class="then">Then add a collection, for example the example one: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
