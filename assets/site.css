@@ -1,0 +1,249 @@
+/* furnish website and docs: the app's own design tokens (gui/src/app.css), shared by both. */
+@font-face {
+  font-family: 'Bricolage Grotesque Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url('fonts/bricolage-grotesque-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+:root {
+  --canvas: #f4f7f7;
+  --sidebar: #eaf0f0;
+  --surface: #ffffff;
+  --ink: #10282e;
+  --ink-soft: #33494f;
+  --muted: #64797e;
+  --line: #dde6e6;
+  --line-strong: #c3d1d2;
+  --hover: #dde8e8;
+  --accent: #0f766e;
+  --accent-strong: #0b5c56;
+  --accent-soft: #d6f5f0;
+  --accent-ink: #0b5c56;
+  --on-accent: #ffffff;
+  --highlight: #f6c453;
+  --highlight-soft: #fdf0cc;
+  --code-bg: #0e1d21;
+  --code-ink: #d5e5e3;
+  --radius: 16px;
+  --shadow: 0 1px 2px rgb(16 40 46 / 0.05);
+  --shadow-raised: 0 24px 60px -24px rgb(16 40 46 / 0.35);
+  --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', Menlo, monospace;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #0d1a1d;
+    --sidebar: #0a1517;
+    --surface: #13262a;
+    --ink: #e4f1ef;
+    --ink-soft: #b8cbcc;
+    --muted: #84999d;
+    --line: #1f363b;
+    --line-strong: #2e4b51;
+    --hover: #172e33;
+    --accent: #2bb3a3;
+    --accent-strong: #3fd0be;
+    --accent-soft: #123b39;
+    --accent-ink: #6fe0d0;
+    --on-accent: #062321;
+    --highlight-soft: #3a2f12;
+    --code-bg: #08171a;
+    --shadow: none;
+    --shadow-raised: 0 24px 60px -20px rgb(0 0 0 / 0.7);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font: 1rem/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: var(--accent-ink);
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+.icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  vertical-align: -0.2em;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 6px;
+  background: var(--hover);
+}
+pre {
+  margin: 1rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border-radius: 12px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  line-height: 1.55;
+}
+
+/* Header shared by the homepage and the docs. */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--canvas) 85%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.7rem 1rem;
+}
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink);
+  font: 700 1.3rem var(--font-display);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.wordmark img {
+  width: 30px;
+  height: 30px;
+}
+.topbar nav {
+  display: flex;
+  gap: 0.2rem;
+  margin-left: auto;
+}
+.topbar nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+.topbar nav a:hover,
+.topbar nav a[aria-current='page'] {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+.button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.button.primary:hover {
+  background: var(--accent-strong);
+}
+.button.secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+.button.secondary:hover {
+  background: var(--hover);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .button:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* A screenshot as an app window on the canvas. */
+.window {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+}
+.window img {
+  display: block;
+  width: 100%;
+}
+figcaption {
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+footer.site {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+footer.site .inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
+}
+footer.site a {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 40rem) {
+  .topbar-inner {
+    gap: 0.75rem;
+  }
+  .topbar nav a span {
+    display: none;
+  }
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{title}} · furnish docs</title>
+  <link rel="icon" href="../../assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../../assets/site.css" />
+  <link rel="stylesheet" href="../../assets/docs.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="wordmark" href="../../"><img src="../../assets/logo.svg" alt="" />furnish</a>
+      <label class="version">
+        <span class="visually-hidden">Version</span>
+        <select onchange="location.href = this.value">{{versions}}</select>
+      </label>
+      <nav aria-label="Site">
+        <a href="../../"><icon name="sparkles" /><span>Home</span></a>
+        <a href="index.html" aria-current="page"><icon name="book-open" /><span>Docs</span></a>
+        <a href="https://github.com/furnish-self-service/furnish"><icon name="terminal" /><span>Source</span></a>
+      </nav>
+    </div>
+  </header>
+  <div class="docs">
+    <nav class="pages" aria-label="Docs">
+{{nav}}
+    </nav>
+    <main>
+      <article>
+{{content}}
+      </article>
+      <p class="edit"><a href="{{source}}"><icon name="git-branch" />Edit this page</a></p>
+    </main>
+  </div>
+  <footer class="site">
+    <div class="inner">
+      <span>furnish is <a href="https://github.com/furnish-self-service/furnish/blob/main/LICENSE">MIT licensed</a>.</span>
+      <span>Interface icons: <a href="https://lucide.dev">Lucide</a> (ISC).</span>
+    </div>
+  </footer>
+</body>
+</html>

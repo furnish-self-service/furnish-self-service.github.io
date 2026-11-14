@@ -1,0 +1,40 @@
+name: Website
+
+# The homepage and the docs of each furnish version in versions.json. Daily as well, so docs
+# changes on furnish's main branch reach the site without a push here.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency: pages
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out each furnish version
+        run: |
+          for ref in $(jq -r '.[].ref' versions.json); do
+            git clone -q --depth 1 --branch "$ref" https://github.com/furnish-self-service/furnish.git "furnish/$ref"
+          done
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci && npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deploy
+        uses: actions/deploy-pages@v4

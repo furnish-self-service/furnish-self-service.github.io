@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>furnish: your organization's app store, kept in git</title>
+  <meta name="description" content="furnish shows your users a catalog of the apps you curate. They install, update and remove them with one click; each app is a configuration file in Microsoft's open-source DSC format, kept in a git repository." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <link rel="stylesheet" href="assets/home.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="wordmark" href="./"><img src="assets/logo.svg" alt="" />furnish</a>
+      <nav aria-label="Site">
+        <a href="#how"><icon name="git-branch" /><span>How it works</span></a>
+        <a href="#admins"><icon name="users" /><span>For admins</span></a>
+        <a href="docs/"><icon name="book-open" /><span>Docs</span></a>
+        <a href="https://github.com/furnish-self-service/furnish"><icon name="terminal" /><span>Source</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="status"><icon name="sparkles" />Alpha: Linux packages, no releases yet</p>
+        <h1>Your organization's app store, kept in git.</h1>
+        <p class="lead">
+          furnish shows your people a catalog of the apps you curate. They install, update and remove them with one
+          click, without a ticket. Each app is a configuration file in
+          <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format, kept in a git repository.
+          furnish runs it on Linux, macOS and Windows.
+        </p>
+        <div class="cta">
+          <a class="button primary" href="#install"><icon name="download" />Install the alpha</a>
+          <a class="button secondary" href="docs/"><icon name="book-open" />Read the docs</a>
+        </div>
+      </div>
+      <figure class="window hero-shot">
+        <picture>
+          <source srcset="images/discover-dark.webp" media="(prefers-color-scheme: dark)" />
+          <img src="images/discover.webp" width="2360" height="1520" alt="The furnish app: a Discover page with apps recommended for designers above the full catalog of the example collection." />
+        </picture>
+      </figure>
+    </section>
+
+    <section id="how" class="how">
+      <div class="section-head">
+        <h2>An app is a file. Your catalog is a repository.</h2>
+        <p>No server, no database, no agent fleet. Put <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a> files in git; furnish turns them into an app store.</p>
+      </div>
+      <div class="split">
+        <div class="code-card">
+          <p class="file"><icon name="git-branch" />apps/gimp.dsc.yaml</p>
+<pre><code><span class="k">metadata:</span>
+  <span class="k">furnish:</span>
+    <span class="k">description:</span> <span class="s">Image editor for photo retouching, …</span>
+    <span class="k">categories:</span> [<span class="s">Graphics</span>, <span class="s">Photo</span>]
+    <span class="k">icon:</span> <span class="s">icons/gimp.svg</span>
+    <span class="k">recommended:</span> <span class="x">"[equals(parameters('role'), 'design')]"</span>
+<span class="k">resources:</span>
+  - <span class="k">name:</span> <span class="s">gimp</span>
+    <span class="k">type:</span> <span class="s">Furnish/Package</span>
+    <span class="k">condition:</span> <span class="x">"[not(equals(context().os.family, 'Windows'))]"</span>
+    <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">gimp</span> }
+  - <span class="k">name:</span> <span class="s">gimp (winget)</span>
+    <span class="k">type:</span> <span class="s">Furnish/Package</span>
+    <span class="k">condition:</span> <span class="x">"[equals(context().os.family, 'Windows')]"</span>
+    <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">GIMP.GIMP.3</span> }</code></pre>
+          <ol class="steps">
+            <li><strong>Write</strong> what an app needs, in standard <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC v3</a>: which package, from which package manager, on which system.</li>
+            <li><strong>Push</strong> to the repository your people's furnish follows.</li>
+            <li><strong>They install it</strong>, with the package manager of their system.</li>
+          </ol>
+        </div>
+        <figure class="window">
+          <img src="images/app-detail.webp" width="2360" height="1520" loading="lazy" alt="GIMP's page in furnish: description, install button and a preview of the exact command it will run." />
+        </figure>
+      </div>
+    </section>
+
+    <section class="features" aria-label="Features">
+      <article class="feature wide">
+        <div>
+          <h3><icon name="list-checks" />Every step, before and while it runs</h3>
+          <p>Before installing, furnish lists each step and the exact command, and whether it needs administrator rights. While it runs, the same list fills in live with times and results. Stop after the current step, or right away.</p>
+        </div>
+        <figure class="window"><img src="images/install-progress.webp" width="2360" height="1520" loading="lazy" alt="An install in progress: the current step runs, the next steps wait." /></figure>
+      </article>
+      <article class="feature">
+        <h3><icon name="circle-help" />Questions, then recommendations</h3>
+        <p>A collection can ask what someone works on. The answer recommends the right apps and feeds the options apps use, such as installing just for this user.</p>
+        <figure class="window"><img src="images/questions.webp" width="2360" height="1520" loading="lazy" alt="A dialog asking 'What do you work on?' with a dropdown of roles." /></figure>
+      </article>
+      <article class="feature">
+        <h3><icon name="package" />Kits</h3>
+        <p>Bundle what a role needs. Required apps always come along; people pick the optional ones.</p>
+        <figure class="window"><img src="images/kit.webp" width="2360" height="1520" loading="lazy" alt="The Design studio kit with its apps, required and optional." /></figure>
+      </article>
+      <article class="feature">
+        <h3><icon name="refresh-cw" />Updates when the computer is quiet</h3>
+        <p>furnish installs updates automatically, and waits while the CPU, memory or network are busy. Its own work doesn't count.</p>
+        <figure class="window"><img src="images/updates.webp" width="2360" height="1520" loading="lazy" alt="The Updates page with an update available for LibreOffice." /></figure>
+      </article>
+      <article class="feature">
+        <h3><icon name="layers" />One thing at a time</h3>
+        <p>Click install on several apps and they queue up. The Activity page shows what runs and what waits, and anything queued can be removed.</p>
+        <figure class="window"><img src="images/activity.webp" width="2360" height="1520" loading="lazy" alt="The Activity page: one install running, two queued." /></figure>
+      </article>
+    </section>
+
+    <section id="admins" class="admins">
+      <div class="section-head">
+        <h2>Built for the people who run the fleet</h2>
+        <p>One policy, in each OS's own place for managed settings, decides what users see and change.</p>
+      </div>
+      <div class="admin-grid">
+        <div class="admin-list">
+          <div class="item">
+            <icon name="shield-check" />
+            <div><h3>Users without admin rights</h3><p>The furnish service installs your collections' apps system-wide on their behalf, and only those, for the people you allow.</p></div>
+          </div>
+          <div class="item">
+            <icon name="lock" />
+            <div><h3>Signed all the way</h3><p>Collections can require commits signed by your keys. furnish's own packages come from a signed APT and RPM repository.</p></div>
+          </div>
+          <div class="item">
+            <icon name="users" />
+            <div><h3>Preset and locked</h3><p>Hand out collections, answer questions for your people, and lock any setting or option.</p></div>
+          </div>
+          <div class="item">
+            <icon name="palette" />
+            <div><h3>Your name, logo and colors</h3><p>furnish can carry your branding. It keeps text readable whatever your brand color is.</p></div>
+          </div>
+        </div>
+        <figure class="window"><img src="images/branded.webp" width="2360" height="1520" loading="lazy" alt="furnish branded as Acme Apps, with an orange accent color and the organization's logo." /></figure>
+      </div>
+    </section>
+
+    <section id="install" class="install">
+      <div class="section-head">
+        <h2><icon name="download" />Install the alpha</h2>
+        <p>Builds of the main branch, versioned <code>0.1.0+alpha.&lt;build&gt;</code>. Updates arrive with your system's own updates.</p>
+      </div>
+      <div class="tabs">
+        <input type="radio" name="os" id="t-apt" checked /><label for="t-apt">Debian, Ubuntu</label>
+        <input type="radio" name="os" id="t-dnf" /><label for="t-dnf">Fedora, EL 10</label>
+        <input type="radio" name="os" id="t-zypper" /><label for="t-zypper">openSUSE</label>
+        <input type="radio" name="os" id="t-nix" /><label for="t-nix">NixOS</label>
+<pre class="panel" id="p-apt"><code>sudo install -d /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/furnish.asc https://furnish-self-service.github.io/furnish/gpg-key.asc
+sudo curl -fsSLo /etc/apt/sources.list.d/furnish.list https://furnish-self-service.github.io/furnish/alpha/furnish.list
+sudo apt update &amp;&amp; sudo apt install furnish</code></pre>
+<pre class="panel" id="p-dnf"><code>sudo curl -fsSLo /etc/yum.repos.d/furnish.repo https://furnish-self-service.github.io/furnish/alpha/furnish.repo
+sudo dnf install furnish     # Enterprise Linux 10: enable EPEL and CRB first</code></pre>
+<pre class="panel" id="p-zypper"><code>sudo zypper addrepo https://furnish-self-service.github.io/furnish/alpha/furnish.repo
+sudo zypper install furnish</code></pre>
+<pre class="panel" id="p-nix"><code># flake.nix
+inputs.furnish.url = "github:furnish-self-service/furnish";
+
+# configuration.nix, with furnish.nixosModules.default imported
+services.furnish.enable = true;</code></pre>
+      </div>
+      <p class="then">Then add a collection, for example the example one: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>. Builds for macOS and Windows aren't published yet; <a href="docs/">the docs</a> show how to build them.</p>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="inner">
+      <span>furnish is <a href="https://github.com/furnish-self-service/furnish/blob/main/LICENSE">MIT licensed</a>.</span>
+      <a href="docs/">Docs</a>
+      <a href="https://github.com/furnish-self-service/furnish">Source</a>
+      <a href="https://github.com/furnish-self-service/self-service-example">Example collection</a>
+      <span>Interface icons: <a href="https://lucide.dev">Lucide</a> (ISC). App icons in the screenshots belong to their projects.</span>
+    </div>
+  </footer>
+</body>
+</html>

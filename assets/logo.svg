@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="furnish logo">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#0f5f73"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#tile)"/>
+  <!-- armchair -->
+  <g fill="#ffffff">
+    <rect x="150" y="118" width="212" height="170" rx="40"/>
+    <rect x="96" y="214" width="84" height="160" rx="38"/>
+    <rect x="332" y="214" width="84" height="160" rx="38"/>
+    <rect x="96" y="318" width="320" height="56" rx="26"/>
+    <rect x="128" y="360" width="30" height="48" rx="10"/>
+    <rect x="354" y="360" width="30" height="48" rx="10"/>
+  </g>
+  <!-- seat cushion -->
+  <rect x="172" y="262" width="168" height="62" rx="22" fill="#d6f5f0"/>
+  <!-- "available" sparkle: the app is ready to take -->
+  <path d="M398 92 l10 26 26 10 -26 10 -10 26 -10 -26 -26 -10 26 -10z" fill="#fde68a"/>
+</svg>

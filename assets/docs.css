@@ -1,0 +1,123 @@
+/* The docs: the app's sidebar layout, a readable column of text. */
+.docs {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  gap: 3rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+.pages {
+  position: sticky;
+  top: 5rem;
+  align-self: start;
+  display: grid;
+  gap: 0.15rem;
+}
+.pages a {
+  padding: 0.45rem 0.8rem;
+  border-radius: 10px;
+  color: var(--ink-soft);
+  font-weight: 550;
+  text-decoration: none;
+}
+.pages a:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.pages a[aria-current='page'] {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+.version select {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 0.85rem var(--font-body);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+article {
+  max-width: 46rem;
+}
+article h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 4vw, 2.7rem);
+}
+article h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.5rem;
+}
+article h3 {
+  margin: 1.8rem 0 0.5rem;
+  font-size: 1.15rem;
+}
+article p,
+article li {
+  color: var(--ink-soft);
+}
+article strong {
+  color: var(--ink);
+}
+article table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+article th,
+article td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+article th {
+  color: var(--ink);
+  font-weight: 650;
+}
+/* Screenshots: Markdown images, framed like the app's window. */
+article img {
+  display: block;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 14px 34px -20px rgb(16 40 46 / 0.45);
+}
+article blockquote {
+  margin: 1.25rem 0;
+  padding: 0.8rem 1rem;
+  border-left: 4px solid var(--highlight);
+  border-radius: 0 10px 10px 0;
+  background: var(--highlight-soft);
+}
+article blockquote p {
+  margin: 0;
+  color: var(--ink);
+}
+.edit a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 2rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+@media (max-width: 52rem) {
+  .docs {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .pages {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
