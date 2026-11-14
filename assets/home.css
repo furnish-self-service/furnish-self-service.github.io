@@ -243,13 +243,23 @@ section {
 .tabs .panel {
   display: none;
   flex-basis: 100%;
+  min-width: 0; /* else long commands widen the page instead of scrolling */
   margin-top: 0.8rem;
 }
 #t-apt:checked ~ #p-apt,
 #t-dnf:checked ~ #p-dnf,
 #t-zypper:checked ~ #p-zypper,
-#t-nix:checked ~ #p-nix {
+#t-nix:checked ~ #p-nix,
+#t-mac:checked ~ #p-mac,
+#t-win:checked ~ #p-win {
   display: block;
+}
+.tabs .panel > p {
+  margin: 0 0 0.6rem;
+  color: var(--ink-soft);
+}
+.tabs .panel > pre {
+  margin: 0;
 }
 .then {
   max-width: 50rem;
@@ -257,17 +267,18 @@ section {
 }
 
 @media (max-width: 60rem) {
+  /* minmax(0, …): a plain 1fr column grows to fit long code lines and widens the page. */
   .hero,
   .split,
   .admin-grid,
   .feature.wide {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .hero-shot {
     margin-right: 0;
   }
   .features {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   section {
     padding: 3rem 0;

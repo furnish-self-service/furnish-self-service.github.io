@@ -29,7 +29,11 @@
   background: var(--accent-soft);
   color: var(--accent-ink);
 }
+.version {
+  min-width: 0;
+}
 .version select {
+  max-width: 100%;
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--line-strong);
   border-radius: 10px;
@@ -66,7 +70,17 @@ article li {
 article strong {
   color: var(--ink);
 }
+article {
+  overflow-wrap: break-word;
+}
+/* Long paths and identifiers may break anywhere; words only when they must. */
+article :not(pre) > code {
+  overflow-wrap: anywhere;
+}
+/* Wide tables scroll inside the column instead of widening the page. */
 article table {
+  display: block;
+  overflow-x: auto;
   width: 100%;
   margin: 1rem 0;
   border-collapse: collapse;
@@ -112,7 +126,7 @@ article blockquote p {
 }
 @media (max-width: 52rem) {
   .docs {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr); /* not 1fr: long code would widen the page */
     gap: 1.5rem;
   }
   .pages {

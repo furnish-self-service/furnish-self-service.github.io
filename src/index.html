@@ -149,6 +149,8 @@
         <input type="radio" name="os" id="t-dnf" /><label for="t-dnf">Fedora, EL 10</label>
         <input type="radio" name="os" id="t-zypper" /><label for="t-zypper">openSUSE</label>
         <input type="radio" name="os" id="t-nix" /><label for="t-nix">NixOS</label>
+        <input type="radio" name="os" id="t-mac" /><label for="t-mac">macOS</label>
+        <input type="radio" name="os" id="t-win" /><label for="t-win">Windows</label>
 <pre class="panel" id="p-apt"><code>sudo install -d /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/furnish.asc https://furnish-self-service.github.io/furnish/gpg-key.asc
 sudo curl -fsSLo /etc/apt/sources.list.d/furnish.list https://furnish-self-service.github.io/furnish/alpha/furnish.list
@@ -162,8 +164,19 @@ inputs.furnish.url = "github:furnish-self-service/furnish";
 
 # configuration.nix, with furnish.nixosModules.default imported
 services.furnish.enable = true;</code></pre>
+<div class="panel" id="p-mac">
+  <p>There's no published build for macOS yet. Build it with Xcode's command line tools, Rust and Node.js:</p>
+<pre><code>git clone https://github.com/furnish-self-service/furnish.git
+cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle
+open ../target/release/bundle/dmg/*.dmg</code></pre>
+</div>
+<div class="panel" id="p-win">
+  <p>There's no published build for Windows yet. Build it with Visual Studio's C++ build tools, Rust and Node.js, then run the installer from <code>target\release\bundle\msi</code>:</p>
+<pre><code>git clone https://github.com/furnish-self-service/furnish.git
+cd furnish\gui; npm ci; npm run bundle</code></pre>
+</div>
       </div>
-      <p class="then">Then add a collection, for example the example one: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>. Builds for macOS and Windows aren't published yet; <a href="docs/">the docs</a> show how to build them.</p>
+      <p class="then">Then add a collection, for example the example one: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
     </section>
   </main>
 
