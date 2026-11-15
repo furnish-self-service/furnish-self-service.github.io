@@ -135,3 +135,27 @@ article blockquote p {
     flex-wrap: wrap;
   }
 }
+
+/* Configuration files included from the furnish repository (@include): long ones fold. */
+details.file {
+  margin: 1rem 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+}
+details.file summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+details.file[open] summary {
+  margin-bottom: 0.5rem;
+}
+details.file pre {
+  margin-bottom: 0;
+}
+
+/* Headings reached by a link stay clear of the sticky header. */
+article h2,
+article h3 {
+  scroll-margin-top: 5rem;
+}

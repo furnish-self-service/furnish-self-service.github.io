@@ -58,7 +58,10 @@ function includes(body, root, ref) {
     if (md) return text.replace(/^# .*\n+/, '').replace(/^(#+) /gm, '$1# ');
     const fence = text.includes('```') ? '~~~~' : '```';
     const link = `https://github.com/furnish-self-service/furnish/blob/${ref}/${path}`;
-    return `[\`${path}\`](${link}):\n\n${fence}${language(path)}\n${text}\n${fence}`;
+    const block = `${fence}${language(path)}\n${text}\n${fence}`;
+    // Long files fold away, so the page stays readable; short ones show.
+    if (text.split('\n').length <= 25) return `[\`${path}\`](${link}):\n\n${block}`;
+    return `<details class="file"><summary><code>${path}</code></summary>\n\n[On GitHub](${link})\n\n${block}\n\n</details>`;
   });
 }
 
@@ -87,7 +90,14 @@ for (const version of versions) {
       .map((v) => `<option value="../${v.name}/${page.slug}.html"${v === version ? ' selected' : ''}>${v.label}</option>`)
       .join('');
     // Links between pages are written as page.md; the site serves page.html.
-    const content = marked.parse(page.body).replace(/href="([a-z0-9-]+)\.md(#[^"]*)?"/g, 'href="$1.html$2"');
+    const content = marked
+      .parse(page.body)
+      .replace(/href="([a-z0-9-]+)\.md(#[^"]*)?"/g, 'href="$1.html$2"')
+      // Anchors for links like admins.md#reports: the heading's text, lowercase, words joined by "-".
+      .replace(/<h([23])>(.*?)<\/h\1>/g, (_, level, inner) => {
+        const id = inner.replace(/<[^>]+>/g, '').toLowerCase().replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        return `<h${level} id="${id}">${inner}</h${level}>`;
+      });
     const html = template
       .replaceAll('{{title}}', page.title)
       .replace('{{nav}}', nav)
