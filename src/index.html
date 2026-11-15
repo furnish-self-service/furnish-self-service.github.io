@@ -153,6 +153,34 @@
 
       <div class="pillar">
         <div>
+          <h3><icon name="sliders-horizontal" />Settings, not only apps</h3>
+          <ul>
+            <li>An entry in the catalog can be a configuration: a VPN connection, registry values, Windows features or firewall rules. furnish includes Microsoft's DSC resources for them.</li>
+            <li>Your device management can install such entries on first start, and furnish shows whether they are still in place.</li>
+            <li>An entry says how to remove what it set up, so retiring a VPN profile reaches every computer.</li>
+          </ul>
+        </div>
+        <div class="code-card">
+          <p class="file"><icon name="git-branch" />apps/acme-vpn.dsc.yaml, shortened</p>
+<pre><code><span class="k">metadata:</span>
+  <span class="k">furnish:</span>
+    <span class="k">description:</span> <span class="s">Connection to the Acme company network</span>
+    <span class="k">dependencies:</span> [ { <span class="k">app:</span> <span class="s">openvpn-client</span> } ]
+    <span class="k">uninstall:</span>
+      - <span class="k">name:</span> <span class="s">delete the configuration</span>
+        <span class="k">type:</span> <span class="s">Microsoft.DSC.Transitional/RunCommandOnSet</span>
+        <span class="k">properties:</span> { <span class="k">executable:</span> <span class="s">powershell.exe</span>, <span class="s">…</span> }
+<span class="k">resources:</span>
+  - <span class="k">name:</span> <span class="s">OpenVPN configuration</span>
+    <span class="k">type:</span> <span class="s">Microsoft.Filesystem.File/Content</span>
+    <span class="k">properties:</span>
+      <span class="k">path:</span> <span class="s">C:\Program Files\OpenVPN\config\acme.ovpn</span>
+      <span class="k">content:</span> <span class="s">…</span></code></pre>
+        </div>
+      </div>
+
+      <div class="pillar">
+        <div>
           <h3><icon name="scroll-text" />Keep an audit trail</h3>
           <ul>
             <li>furnish reports each install, update, uninstall and fallback with its outcome, the error, the device and the time. The proxy adds the user from the sign-in, so a computer can't report under someone else's name.</li>
