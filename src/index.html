@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>furnish: your organization's app store, kept in git</title>
-  <meta name="description" content="furnish shows your users a catalog of the apps you curate. They install, update and remove them with one click; each app is a configuration file in Microsoft's open-source DSC format, kept in a git repository." />
+  <title>furnish: a self-service app catalog for your organization's computers</title>
+  <meta name="description" content="People install the apps you approve with one click, on Linux, macOS and Windows. furnish installs them with the system's package manager; each app is a short file in Microsoft's open-source DSC format, kept in a git repository." />
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/site.css" />
   <link rel="stylesheet" href="assets/home.css" />
@@ -25,13 +25,13 @@
   <main>
     <section class="hero">
       <div class="hero-text">
-        <p class="status"><icon name="sparkles" />Alpha: builds of the main branch, no releases yet</p>
-        <h1>Your organization's app store, kept in git.</h1>
+        <p class="status"><icon name="sparkles" />Alpha: built from the main branch, no releases yet</p>
+        <h1>A self-service app catalog for your organization's computers</h1>
         <p class="lead">
-          furnish shows your people a catalog of the apps you curate. They install, update and remove them with one
-          click, without a ticket. Each app is a configuration file in
-          <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format, kept in a git repository.
-          furnish runs it on Linux, macOS and Windows.
+          People install the apps you approve with one click, on Linux, macOS and Windows. furnish installs them with
+          the system's own package manager and keeps them updated. You describe each app in a short file in
+          <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration
+          format, and keep the files in a git repository.
         </p>
         <div class="cta">
           <a class="button primary" href="#install"><icon name="download" />Install the alpha</a>
@@ -50,8 +50,8 @@
 
     <section id="how" class="how">
       <div class="section-head">
-        <h2>An app is a file. Your catalog is a repository.</h2>
-        <p>No server, no database, no agent fleet. Put <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a> files in git; furnish turns them into an app store.</p>
+        <h2>How an app gets into the catalog</h2>
+        <p>Each app is one file in a git repository. furnish clones the repository on every computer and pulls changes every 30 minutes; there is no server to run.</p>
       </div>
       <div class="split">
         <div class="code-card">
@@ -72,9 +72,9 @@
     <span class="k">condition:</span> <span class="x">"[equals(context().os.family, 'Windows')]"</span>
     <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">GIMP.GIMP.3</span> }</code></pre>
           <ol class="steps">
-            <li><strong>Write</strong> what an app needs, in standard <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC v3</a>: which package, from which package manager, on which system.</li>
-            <li><strong>Push</strong> to the repository your people's furnish follows.</li>
-            <li><strong>They install it</strong>, with the package manager of their system.</li>
+            <li>Describe the app: which package to install, with which package manager, on which systems.</li>
+            <li>Push the file to the collection's repository.</li>
+            <li>Everyone with the collection sees the app and can install it with their system's package manager.</li>
           </ol>
         </div>
         <figure class="window">
@@ -86,55 +86,59 @@
     <section class="features" aria-label="Features">
       <article class="feature wide">
         <div>
-          <h3><icon name="list-checks" />Every step, before and while it runs</h3>
-          <p>Before installing, furnish lists each step and the exact command, and whether it needs administrator rights. While it runs, the same list fills in live with times and results. Stop after the current step, or right away.</p>
+          <h3><icon name="list-checks" />A preview and live progress for each step</h3>
+          <p>Before you install an app, furnish lists each step with the exact command and whether it needs an administrator password. During the install, the list shows which step runs and how long each took. You can stop after the current step or immediately.</p>
         </div>
         <figure class="window"><img src="images/install-progress.webp" width="2360" height="1520" loading="lazy" alt="An install in progress: the current step runs, the next steps wait." /></figure>
       </article>
       <article class="feature">
-        <h3><icon name="circle-help" />Questions, then recommendations</h3>
-        <p>A collection can ask what someone works on. The answer recommends the right apps and feeds the options apps use, such as installing just for this user.</p>
+        <h3><icon name="circle-help" />Recommendations by role</h3>
+        <p>A collection can ask what someone works on, for example software development or design, and recommend apps for the answer. Apps can also use the answer to decide how they install.</p>
         <figure class="window"><img src="images/questions.webp" width="2360" height="1520" loading="lazy" alt="A dialog asking 'What do you work on?' with a dropdown of roles." /></figure>
       </article>
       <article class="feature">
         <h3><icon name="package" />Kits</h3>
-        <p>Bundle what a role needs. Required apps always come along; people pick the optional ones.</p>
+        <p>A kit installs several apps together, such as the apps a designer needs. Required apps are always included; people choose the optional ones.</p>
         <figure class="window"><img src="images/kit.webp" width="2360" height="1520" loading="lazy" alt="The Design studio kit with its apps, required and optional." /></figure>
       </article>
       <article class="feature">
-        <h3><icon name="refresh-cw" />Updates when the computer is quiet</h3>
-        <p>furnish installs updates automatically, and waits while the CPU, memory or network are busy. Its own work doesn't count.</p>
+        <h3><icon name="refresh-cw" />Automatic updates</h3>
+        <p>furnish installs updates by itself. While the computer is busy, by default over 50% CPU, 90% memory or 1000 KB/s network averaged over 5 minutes, it waits.</p>
         <figure class="window"><img src="images/updates.webp" width="2360" height="1520" loading="lazy" alt="The Updates page with an update available for LibreOffice." /></figure>
       </article>
       <article class="feature">
-        <h3><icon name="layers" />One thing at a time</h3>
-        <p>Click install on several apps and they queue up. The Activity page shows what runs and what waits, and anything queued can be removed.</p>
+        <h3><icon name="layers" />An install queue</h3>
+        <p>When you start several installs, furnish runs them one after another. The Activity page lists what runs and what waits, and you can remove waiting installs.</p>
         <figure class="window"><img src="images/activity.webp" width="2360" height="1520" loading="lazy" alt="The Activity page: one install running, two queued." /></figure>
       </article>
     </section>
 
     <section id="admins" class="admins">
       <div class="section-head">
-        <h2>Built for the people who run the fleet</h2>
-        <p>One policy, in each OS's own place for managed settings, decides what users see and change.</p>
+        <h2>For IT administrators</h2>
+        <p>A policy decides which collections people get and what they may change. furnish reads it from each system's place for managed settings: a file on Linux, an MDM profile on macOS, Group Policy or Intune on Windows.</p>
       </div>
       <div class="admin-grid">
         <div class="admin-list">
           <div class="item">
             <icon name="shield-check" />
-            <div><h3>Users without admin rights</h3><p>The furnish service installs your collections' apps system-wide on their behalf, and only those, for the people you allow.</p></div>
+            <div><h3>Installs without administrator rights</h3><p>The furnish service installs the apps of your collections for people who aren't administrators. It accepts an app's name and option values, nothing else.</p></div>
+          </div>
+          <div class="item">
+            <icon name="key-round" />
+            <div><h3>Sign-in without a VPN</h3><p>Give furnish an address such as furnish.myorg.tld. People sign in with your organization's account, and furnish fetches your collections through a proxy that forwards only git's read requests. Your git server stays internal.</p></div>
           </div>
           <div class="item">
             <icon name="lock" />
-            <div><h3>Signed all the way</h3><p>Collections can require commits signed by your keys. furnish's own packages come from a signed APT and RPM repository.</p></div>
+            <div><h3>Signed collections</h3><p>Preset collections can be limited to commits signed with your SSH keys. furnish's own Linux packages come from a signed APT and RPM repository.</p></div>
           </div>
           <div class="item">
             <icon name="users" />
-            <div><h3>Preset and locked</h3><p>Hand out collections, answer questions for your people, and lock any setting or option.</p></div>
+            <div><h3>Preset collections and locked settings</h3><p>Add collections for everyone, answer their questions, install apps on first start, and lock any setting.</p></div>
           </div>
           <div class="item">
             <icon name="palette" />
-            <div><h3>Your name, logo and colors</h3><p>furnish can carry your branding. It keeps text readable whatever your brand color is.</p></div>
+            <div><h3>Your branding</h3><p>furnish can show your organization's name, logo and color. It derives the other shades and keeps text readable in light and dark mode.</p></div>
           </div>
         </div>
         <figure class="window"><img src="images/branded.webp" width="2360" height="1520" loading="lazy" alt="furnish branded as Acme Apps, with an orange accent color and the organization's logo." /></figure>
@@ -144,7 +148,7 @@
     <section id="install" class="install">
       <div class="section-head">
         <h2><icon name="download" />Install the alpha</h2>
-        <p>Builds of the main branch, versioned <code>0.1.0+alpha.&lt;build&gt;</code>. Updates arrive with your system's own updates.</p>
+        <p>Builds of the main branch, versioned <code>0.1.0+alpha.&lt;build&gt;</code>. On Linux, updates arrive with your system's other updates.</p>
       </div>
       <div class="tabs">
         <input type="radio" name="os" id="t-apt" checked /><label for="t-apt">Debian, Ubuntu</label>
@@ -177,7 +181,7 @@ cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre>
   <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. A new alpha means a new download; furnish doesn't update itself on Windows yet.</p>
 </div>
       </div>
-      <p class="then">Then add a collection, for example the example one: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
+      <p class="then">Then add your organization's furnish address or a collection's git URL on the Collections page. To try furnish, add the example collection: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
     </section>
   </main>
 
