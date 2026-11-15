@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>furnish: a self-service app catalog for your organization's computers</title>
-  <meta name="description" content="People install the apps you approve with one click, on Linux, macOS and Windows. furnish installs them with the system's package manager; each app is a short file in Microsoft's open-source DSC format, kept in a git repository." />
+  <title>furnish: the uncomplicated self-service app for big and small organizations</title>
+  <meta name="description" content="Keep the apps you approve in a git repository. People on Windows, macOS and Linux install them with one click, and furnish keeps them updated with each system's own package manager. There is no server to run." />
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/site.css" />
   <link rel="stylesheet" href="assets/home.css" />
@@ -26,12 +26,16 @@
     <section class="hero">
       <div class="hero-text">
         <p class="status"><icon name="sparkles" />Alpha: built from the main branch, no releases yet</p>
-        <h1>A self-service app catalog for your organization's computers</h1>
+        <h1>The uncomplicated self-service app for big and small organizations</h1>
+        <nav class="platforms" aria-label="Install instructions">
+          <a href="#install" data-tab="t-win"><icon name="windows" />Windows</a>
+          <a href="#install" data-tab="t-mac"><icon name="apple" />macOS</a>
+          <a href="#install" data-tab="t-apt"><icon name="linux" />Linux</a>
+        </nav>
         <p class="lead">
-          People install the apps you approve with one click, on Linux, macOS and Windows. furnish installs them with
-          the system's own package manager and keeps them updated. You describe each app in a short file in
-          <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration
-          format, and keep the files in a git repository.
+          Keep the apps you approve in a git repository. People install them with one click, and furnish keeps them
+          updated with each system's own package manager. There is no server to run. Larger organizations add a
+          policy to preset collections, lock settings and let people without administrator rights install.
         </p>
         <div class="cta">
           <a class="button primary" href="#install"><icon name="download" />Install the alpha</a>
@@ -51,7 +55,7 @@
     <section id="how" class="how">
       <div class="section-head">
         <h2>How an app gets into the catalog</h2>
-        <p>Each app is one file in a git repository. furnish clones the repository on every computer and pulls changes every 30 minutes; there is no server to run.</p>
+        <p>Each app is one file in a git repository, written in <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format. furnish clones the repository on every computer and pulls changes every 30 minutes.</p>
       </div>
       <div class="split">
         <div class="code-card">
@@ -191,8 +195,12 @@ cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre>
       <a href="docs/">Docs</a>
       <a href="https://github.com/furnish-self-service/furnish">Source</a>
       <a href="https://github.com/furnish-self-service/self-service-example">Example collection</a>
-      <span>Interface icons: <a href="https://lucide.dev">Lucide</a> (ISC). App icons in the screenshots belong to their projects.</span>
+      <span>Interface icons: <a href="https://lucide.dev">Lucide</a> (ISC); system logos: <a href="https://simpleicons.org">Simple Icons</a> (CC0). App icons in the screenshots belong to their projects.</span>
     </div>
   </footer>
+  <script>
+    // The system logos open their install tab; without JavaScript they still lead to the install section.
+    for (const a of document.querySelectorAll('[data-tab]')) a.addEventListener('click', () => (document.getElementById(a.dataset.tab).checked = true));
+  </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 The furnish website: the homepage and the docs of each furnish version, at <https://furnish-self-service.github.io/>.
 
 - `src/index.html`: the homepage. `src/docs.html`: the docs page template.
-- `assets/`: styles (furnish's own design tokens), the Bricolage Grotesque font, the logo and [Lucide](https://lucide.dev) icons (ISC). `<icon name="…" />` in the HTML inlines `assets/icons/<name>.svg`.
+- `assets/`: styles (furnish's own design tokens), the Bricolage Grotesque font, the logo [Lucide](https://lucide.dev) icons (ISC) and system logos from [Simple Icons](https://simpleicons.org) (CC0; the Windows logo is drawn). `<icon name="…" />` in the HTML inlines `assets/icons/<name>.svg`.
 - The docs and screenshots live in the furnish repository (`docs/site/`), so they change with the code. `versions.json` lists the versions to build, newest first; add a release's tag there to publish its docs.
 
 ```sh

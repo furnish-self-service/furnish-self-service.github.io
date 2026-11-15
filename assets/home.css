@@ -27,7 +27,7 @@ section {
 /* Hero: the message, then the real app, larger than the column it starts in. */
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
   gap: 3rem;
   align-items: center;
   padding-top: 4rem;
@@ -49,7 +49,7 @@ section {
 }
 .hero h1 {
   margin: 0;
-  font-size: clamp(2.3rem, 4.4vw, 3.4rem);
+  font-size: clamp(2.1rem, 3.9vw, 3.1rem);
   font-weight: 750;
   letter-spacing: -0.035em;
 }
@@ -65,7 +65,8 @@ section {
   gap: 0.75rem;
 }
 .hero-shot {
-  margin-right: -6rem;
+  /* Runs into the page margin, by up to 6rem, but never past the window. */
+  margin-right: calc(-1 * clamp(0px, (100vw - 72rem) / 2 - 2rem, 6rem));
 }
 
 /* How it works: the file next to what it becomes. */
@@ -285,5 +286,37 @@ section {
   }
   section {
     padding: 3rem 0;
+  }
+}
+
+/* The systems furnish runs on, each a link to its install tab. */
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.4rem;
+}
+.platforms a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+.platforms a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.platforms .icon {
+  width: 1.3em;
+  height: 1.3em;
+}
+@media (max-width: 40rem) {
+  .platforms a {
+    font-size: var(--text-small);
   }
 }
