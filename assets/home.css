@@ -190,7 +190,12 @@ section {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
   gap: 2.5rem;
-  align-items: center;
+  align-items: start;
+}
+/* The list is longer than the screenshot: the screenshot stays in view beside it. */
+.admin-grid > .window {
+  position: sticky;
+  top: 6rem;
 }
 .admin-list {
   display: grid;

@@ -115,6 +115,16 @@
         <p>When you start several installs, furnish runs them one after another. The Activity page lists what runs and what waits, and you can remove waiting installs.</p>
         <figure class="window"><img src="images/activity.webp" width="2360" height="1520" loading="lazy" alt="The Activity page: one install running, two queued." /></figure>
       </article>
+      <article class="feature">
+        <h3><icon name="history" />An earlier version when an install fails</h3>
+        <p>If installing or updating an app fails, furnish offers the version that last worked and keeps it until the collection changes the app. Administrators decide whether furnish asks first, installs it right away or doesn't offer it.</p>
+        <figure class="window"><img src="images/fallback.webp" width="2360" height="1520" loading="lazy" alt="An app page after a failed install, offering to install the app's version from an earlier date." /></figure>
+      </article>
+      <article class="feature">
+        <h3><icon name="languages" />In English and German</h3>
+        <p>furnish follows the system's language, and people can switch it on the Collections page. Organizations can set it for everyone.</p>
+        <figure class="window"><img src="images/discover-de.webp" width="2360" height="1520" loading="lazy" alt="The Discover page in German, with recommended apps." /></figure>
+      </article>
     </section>
 
     <section id="admins" class="admins">
@@ -139,6 +149,18 @@
           <div class="item">
             <icon name="users" />
             <div><h3>Preset collections and locked settings</h3><p>Add collections for everyone, answer their questions, install apps on first start, and lock any setting.</p></div>
+          </div>
+          <div class="item">
+            <icon name="activity" />
+            <div><h3>Reports to your log system</h3><p>furnish can report which apps it installed, updated or removed and whether that worked, with the person's sign-in. Your furnish address passes the reports to Vector, which writes them to Loki, Elasticsearch, Splunk or a file. A Grafana dashboard comes with it. Reports stay off until you turn them on.</p></div>
+          </div>
+          <div class="item">
+            <icon name="file-check" />
+            <div><h3>Checks before people install</h3><p><code>furnish check</code> finds app files that don't load, missing installers and conditions that don't evaluate, and shows what runs on each system. Run it in your repository's CI on every change.</p></div>
+          </div>
+          <div class="item">
+            <icon name="hard-drive-download" />
+            <div><h3>Only what each computer needs</h3><p>Computers download a collection's installers only for the apps they install, and the files of earlier versions only when they need one.</p></div>
           </div>
           <div class="item">
             <icon name="palette" />
