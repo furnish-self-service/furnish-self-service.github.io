@@ -31,7 +31,7 @@
         <nav class="platforms" aria-label="Install instructions">
           <a href="#install" data-tab="t-win"><icon name="windows" />Windows</a>
           <a href="#install" data-tab="t-mac"><icon name="apple" />macOS</a>
-          <a href="#install" data-tab="t-apt"><icon name="linux" />Linux</a>
+          <a href="#install" data-tab="t-linux"><icon name="linux" />Linux</a>
         </nav>
         <p class="lead">
           People install the apps you approved with one click, and furnish keeps them updated with each system's own
@@ -74,7 +74,7 @@
         </article>
         <article class="node both left">
           <h3><icon name="package" />The systems' package managers</h3>
-          <p>apt, dnf, zypper, pacman, Nix, Homebrew and winget, and .deb, .rpm, .pkg, .dmg, .msi and .exe installers kept in the repository.</p>
+          <p>winget on Windows, Homebrew on macOS and the system's package manager on Linux, plus installer files kept in the repository (.msi, .exe, .pkg, .dmg, .deb, .rpm).</p>
         </article>
         <article class="node large-only left">
           <h3><icon name="shield-check" />Device management</h3>
@@ -115,7 +115,7 @@
           </li>
           <li>
             <h3>Install furnish on each computer</h3>
-            <p>From the signed package repository on Linux, or the download for macOS and Windows. <a href="#install">Install instructions</a></p>
+            <p>The download for Windows or macOS, or the signed package repository on Linux. <a href="#install">Install instructions</a></p>
           </li>
           <li>
             <h3>Add the repository</h3>
@@ -274,39 +274,42 @@
     <section id="install" class="install">
       <div class="section-head">
         <h2><icon name="download" />Install the alpha</h2>
-        <p>Builds of the main branch, versioned <code>0.1.0+alpha.&lt;build&gt;</code>. On Linux, updates arrive with your system's other updates.</p>
+        <p>Builds of the main branch, versioned <code>0.1.0+alpha.&lt;build&gt;</code>.</p>
       </div>
       <div class="tabs">
-        <input type="radio" name="os" id="t-apt" checked /><label for="t-apt">Debian, Ubuntu</label>
-        <input type="radio" name="os" id="t-dnf" /><label for="t-dnf">Fedora, EL 10</label>
-        <input type="radio" name="os" id="t-zypper" /><label for="t-zypper">openSUSE</label>
-        <input type="radio" name="os" id="t-nix" /><label for="t-nix">NixOS</label>
-        <input type="radio" name="os" id="t-mac" /><label for="t-mac">macOS</label>
-        <input type="radio" name="os" id="t-win" /><label for="t-win">Windows</label>
-<pre class="panel" id="p-apt"><code>sudo install -d /etc/apt/keyrings
-sudo curl -fsSLo /etc/apt/keyrings/furnish.asc https://furnish-self-service.github.io/furnish/gpg-key.asc
-sudo curl -fsSLo /etc/apt/sources.list.d/furnish.list https://furnish-self-service.github.io/furnish/alpha/furnish.list
-sudo apt update &amp;&amp; sudo apt install furnish</code></pre>
-<pre class="panel" id="p-dnf"><code>sudo curl -fsSLo /etc/yum.repos.d/furnish.repo https://furnish-self-service.github.io/furnish/alpha/furnish.repo
-sudo dnf install furnish     # Enterprise Linux 10: enable EPEL and CRB first</code></pre>
-<pre class="panel" id="p-zypper"><code>sudo zypper addrepo https://furnish-self-service.github.io/furnish/alpha/furnish.repo
-sudo zypper install furnish</code></pre>
-<pre class="panel" id="p-nix"><code># flake.nix
-inputs.furnish.url = "github:furnish-self-service/furnish";
-
-# configuration.nix, with furnish.nixosModules.default imported
-services.furnish.enable = true;</code></pre>
+        <input type="radio" name="os" id="t-win" checked /><label for="t-win"><icon name="windows" />Windows</label>
+        <input type="radio" name="os" id="t-mac" /><label for="t-mac"><icon name="apple" />macOS</label>
+        <input type="radio" name="os" id="t-linux" /><label for="t-linux"><icon name="linux" />Linux</label>
+<div class="panel" id="p-win">
+  <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-windows.msi"><icon name="download" />Download for Windows (64-bit)</a></p>
+  <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. A new alpha means a new download; furnish doesn't update itself on Windows yet.</p>
+</div>
 <div class="panel" id="p-mac">
   <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg"><icon name="download" />Download for Mac with Apple silicon</a></p>
   <p>The alpha isn't signed by Apple yet, so macOS blocks it at first: open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. A new alpha means a new download; furnish doesn't update itself on macOS yet. For Intel Macs, build it with Xcode's command line tools, Rust and Node.js:</p>
 <pre><code>git clone https://github.com/furnish-self-service/furnish.git
 cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre>
 </div>
-<div class="panel" id="p-win">
-  <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-windows.msi"><icon name="download" />Download for Windows (64-bit)</a></p>
-  <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. A new alpha means a new download; furnish doesn't update itself on Windows yet.</p>
+<div class="panel" id="p-linux">
+  <p>furnish comes from a signed package repository, so updates arrive with the system's other updates. Pick the commands for your distribution:</p>
+  <details open><summary>Debian, Ubuntu and their derivatives</summary>
+<pre><code>sudo install -d /etc/apt/keyrings
+sudo curl -fsSLo /etc/apt/keyrings/furnish.asc https://furnish-self-service.github.io/furnish/gpg-key.asc
+sudo curl -fsSLo /etc/apt/sources.list.d/furnish.list https://furnish-self-service.github.io/furnish/alpha/furnish.list
+sudo apt update &amp;&amp; sudo apt install furnish</code></pre></details>
+  <details><summary>Fedora and Enterprise Linux 10</summary>
+<pre><code>sudo curl -fsSLo /etc/yum.repos.d/furnish.repo https://furnish-self-service.github.io/furnish/alpha/furnish.repo
+sudo dnf install furnish     # Enterprise Linux 10: enable EPEL and CRB first</code></pre></details>
+  <details><summary>openSUSE</summary>
+<pre><code>sudo zypper addrepo https://furnish-self-service.github.io/furnish/alpha/furnish.repo
+sudo zypper install furnish</code></pre></details>
+  <details><summary>NixOS</summary>
+<pre><code># flake.nix
+inputs.furnish.url = "github:furnish-self-service/furnish";
+
+# configuration.nix, with furnish.nixosModules.default imported
+services.furnish.enable = true;</code></pre></details>
 </div>
-      </div>
       <p class="then">Then add your organization's furnish address or a collection's git URL on the Collections page. To try furnish, add the example collection: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
     </section>
   </main>
