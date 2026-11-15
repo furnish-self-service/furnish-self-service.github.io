@@ -70,25 +70,25 @@
         </div>
         <article class="node both left">
           <h3><icon name="git-branch" />Your git server</h3>
-          <p>GitHub, GitLab, Gitea, Forgejo or any server git reaches over HTTPS or SSH. One repository is the catalog; private ones work with a token or an SSH key.</p>
+          <p>GitHub, GitLab, Gitea, Forgejo or any other git server, with public or private repositories. One repository is the catalog.</p>
         </article>
         <article class="node both left">
           <h3><icon name="package" />The systems' package managers</h3>
-          <p>winget on Windows, Homebrew on macOS and the system's package manager on Linux, plus installer files kept in the repository (.msi, .exe, .pkg, .dmg, .deb, .rpm).</p>
+          <p>winget on Windows, Homebrew on macOS and the system's package manager on Linux, plus installer files you keep in the repository.</p>
         </article>
         <article class="node large-only left">
           <h3><icon name="shield-check" />Device management</h3>
-          <p>A policy from Intune, Group Policy, an MDM profile or a file in /etc decides which collections people get and locks settings.</p>
+          <p>A policy from Intune, Group Policy or your MDM decides which collections people get and locks settings.</p>
           <span class="tier">Large organizations</span>
         </article>
         <article class="node large-only right">
           <h3><icon name="key-round" />Single sign-on</h3>
-          <p>Your OpenID Connect provider, such as Entra ID, Keycloak or Authentik. People sign in once; furnish uses the sign-in for git and for reports.</p>
+          <p>Your identity provider, such as Entra ID, Keycloak or Authentik. People sign in with their organization account.</p>
           <span class="tier">Large organizations</span>
         </article>
         <article class="node large-only right">
           <h3><icon name="network" />Load balancer or reverse proxy</h3>
-          <p>A furnish address behind Caddy, nginx, Traefik, Envoy or HAProxy, with tested configurations. It forwards git's read requests for the listed repositories only; the git server stays internal.</p>
+          <p>A furnish address behind Caddy, nginx, Traefik, Envoy or HAProxy, with tested configurations. Your git server stays internal.</p>
           <span class="tier">Large organizations</span>
         </article>
         <article class="node large-only right">
@@ -119,7 +119,7 @@
           </li>
           <li>
             <h3>Add the repository</h3>
-            <p>Paste its URL on the Collections page, or run <code>furnish collection add &lt;url&gt;</code>. furnish pulls changes every 30 minutes and installs updates when the computer isn't busy.</p>
+            <p>Paste its URL on the Collections page, or run <code>furnish collection add &lt;url&gt;</code>. From then on, furnish picks up new apps and updates by itself.</p>
           </li>
         </ol>
         <figure class="window"><img src="images/private-collection.webp" width="2360" height="1520" loading="lazy" alt="The Collections page with the form for adding a collection, including the login fields for a private repository." /></figure>
@@ -143,8 +143,8 @@
           <h3><icon name="shield-check" />Enforce what people get</h3>
           <ul>
             <li>A policy from your device management presets collections people can't remove, answers their questions, locks settings and installs apps on first start.</li>
-            <li>People without administrator rights install through the furnish service, which accepts an app's name and the option values it declares, nothing else. You choose the group that may use it.</li>
-            <li>Preset collections only move to commits signed with your SSH keys, and never back to an older one.</li>
+            <li>People without administrator rights can install the apps of your preset collections through the furnish service. You choose who may.</li>
+            <li>Preset collections only accept changes signed with your keys.</li>
             <li>Your organization's name, logo and color replace furnish's.</li>
           </ul>
         </div>
@@ -157,7 +157,7 @@
           <ul>
             <li>furnish reports each install, update, uninstall and fallback with its outcome, the error, the device and the time. The proxy adds the user from the sign-in, so a computer can't report under someone else's name.</li>
             <li>Reports go through Vector to your log system. The included Grafana dashboard shows failures per app, the furnish versions in use and devices that stopped reporting.</li>
-            <li>Reports are off until you turn them on, for failures only or for everything, and you can lock the choice. Works councils can review exactly which fields are sent.</li>
+            <li>Reports are off until you turn them on, and you can lock the choice. Works councils can review exactly what is sent.</li>
           </ul>
         </div>
         <div class="code-card report">
@@ -179,9 +179,9 @@
           <h3><icon name="network" />Handle many computers</h3>
           <ul>
             <li>There is no catalog server to scale: every computer pulls from git, so your git server, or a mirror of it, carries the load.</li>
-            <li>Computers download only what they use: the history without old file contents, and installers only for the apps installed there.</li>
-            <li>A furnish address such as furnish.myorg.tld behind your load balancer replaces the VPN. People sign in with their organization account; the proxy forwards git's read requests for your listed repositories with a read-only deploy token.</li>
-            <li>An onboarding e-mail with a <code>furnish://</code> link adds the address after one confirmation, and the address can install the VPN client or other first apps.</li>
+            <li>Computers download only what they use.</li>
+            <li>A furnish address such as furnish.myorg.tld behind your load balancer replaces the VPN. People sign in with their organization account, and your git server stays internal.</li>
+            <li>A link in an onboarding e-mail sets furnish up for your organization, including first apps such as the VPN client.</li>
           </ul>
         </div>
         <figure class="window"><img src="images/sign-in.webp" width="2360" height="1520" loading="lazy" alt="furnish asking the person to sign in to Acme again." /></figure>
@@ -199,13 +199,13 @@
       <article class="feature wide">
         <div>
           <h3><icon name="list-checks" />A preview and live progress for each step</h3>
-          <p>Before you install an app, furnish lists each step with the exact command and whether it needs an administrator password. During the install, the list shows which step runs and how long each took. You can stop after the current step or immediately.</p>
+          <p>Before you install an app, furnish shows what it will do. During the install you follow each step and can stop it.</p>
         </div>
         <figure class="window"><img src="images/install-progress.webp" width="2360" height="1520" loading="lazy" alt="An install in progress: the current step runs, the next steps wait." /></figure>
       </article>
       <article class="feature">
         <h3><icon name="circle-help" />Recommendations by role</h3>
-        <p>A collection can ask what someone works on, for example software development or design, and recommend apps for the answer. Apps can also use the answer to decide how they install.</p>
+        <p>A collection can ask what someone works on, for example software development or design, and recommend the apps for it.</p>
         <figure class="window"><img src="images/questions.webp" width="2360" height="1520" loading="lazy" alt="A dialog asking 'What do you work on?' with a dropdown of roles." /></figure>
       </article>
       <article class="feature">
@@ -215,17 +215,17 @@
       </article>
       <article class="feature">
         <h3><icon name="refresh-cw" />Automatic updates</h3>
-        <p>furnish installs updates by itself. While the computer is busy, by default over 50% CPU, 90% memory or 1000 KB/s network averaged over 5 minutes, it waits.</p>
+        <p>furnish installs updates by itself, when the computer isn't busy, so they don't get in the way of work.</p>
         <figure class="window"><img src="images/updates.webp" width="2360" height="1520" loading="lazy" alt="The Updates page with an update available for LibreOffice." /></figure>
       </article>
       <article class="feature">
         <h3><icon name="layers" />An install queue</h3>
-        <p>When you start several installs, furnish runs them one after another. The Activity page lists what runs and what waits, and you can remove waiting installs.</p>
+        <p>When you start several installs, furnish runs them one after another, and the Activity page shows what's next.</p>
         <figure class="window"><img src="images/activity.webp" width="2360" height="1520" loading="lazy" alt="The Activity page: one install running, two queued." /></figure>
       </article>
       <article class="feature">
         <h3><icon name="history" />An earlier version when an install fails</h3>
-        <p>If installing or updating an app fails, furnish offers the version that last worked and keeps it until the collection changes the app. Administrators decide whether furnish asks first, installs it right away or doesn't offer it.</p>
+        <p>If installing or updating an app fails, furnish offers the version that last worked and keeps it until the collection changes the app. Administrators decide whether it does.</p>
         <figure class="window"><img src="images/fallback.webp" width="2360" height="1520" loading="lazy" alt="An app page after a failed install, offering to install the app's version from an earlier date." /></figure>
       </article>
       <article class="feature">
@@ -239,7 +239,7 @@
     <section id="how" class="how">
       <div class="section-head">
         <h2>How an app gets into the catalog</h2>
-        <p>Each app is one file in a git repository, written in <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format. furnish clones the repository on every computer and pulls changes every 30 minutes.</p>
+        <p>Each app is one file in a git repository, written in <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format. furnish keeps a copy of the repository on every computer and keeps it up to date.</p>
       </div>
       <div class="split">
         <div class="code-card">
@@ -274,7 +274,7 @@
     <section id="install" class="install">
       <div class="section-head">
         <h2><icon name="download" />Install the alpha</h2>
-        <p>Builds of the main branch, versioned <code>0.1.0+alpha.&lt;build&gt;</code>.</p>
+        <p>Builds of the main branch; there are no releases yet.</p>
       </div>
       <div class="tabs">
         <input type="radio" name="os" id="t-win" checked /><label for="t-win"><icon name="windows" />Windows</label>
