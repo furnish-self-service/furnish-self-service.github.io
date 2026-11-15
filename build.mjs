@@ -41,6 +41,26 @@ function mobileImages(html, dir) {
 const images = `${checkout(latest)}/docs/site/images`;
 writeFileSync(`${out}/index.html`, mobileImages(icons(readFileSync('src/index.html', 'utf8')), images));
 cpSync(`${checkout(latest)}/docs/site/images`, `${out}/images`, { recursive: true });
+// The open-source components in furnish's installers and their licenses (the footers link it).
+const notices = `${checkout(latest)}/THIRD-PARTY-LICENSES.html`;
+if (existsSync(notices)) cpSync(notices, `${out}/licenses.html`);
+
+/** `@include <path>` on its own line: the file from the furnish repository at that version, as a
+ *  code block with a link to it, so the docs show exactly the files CI tests (endpoint configs).
+ *  `@include-md <path>`: a Markdown file's text, without its first heading, one level deeper. */
+function includes(body, root, ref) {
+  const language = (path) =>
+    ({ yml: 'yaml', yaml: 'yaml', conf: 'nginx', template: 'nginx', cfg: 'haproxy', json: 'json', sh: 'sh', toml: 'toml' })[
+      path.split('.').pop()
+    ] ?? (path.endsWith('Caddyfile') ? 'caddyfile' : '');
+  return body.replace(/^@include(-md)? (\S+)$/gm, (_, md, path) => {
+    const text = readFileSync(`${root}/${path}`, 'utf8').trimEnd();
+    if (md) return text.replace(/^# .*\n+/, '').replace(/^(#+) /gm, '$1# ');
+    const fence = text.includes('```') ? '~~~~' : '```';
+    const link = `https://github.com/furnish-self-service/furnish/blob/${ref}/${path}`;
+    return `[\`${path}\`](${link}):\n\n${fence}${language(path)}\n${text}\n${fence}`;
+  });
+}
 
 // The docs: one tree per version; /docs/ goes to the latest.
 const template = readFileSync('src/docs.html', 'utf8');
@@ -53,7 +73,7 @@ for (const version of versions) {
       const [, front, body] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/) ?? [];
       if (!front) throw new Error(`${dir}/${file}: needs front matter with title and order`);
       const meta = Object.fromEntries(front.split('\n').map((l) => l.split(/:\s*(.*)/s).slice(0, 2)));
-      return { slug: file.replace(/\.md$/, ''), title: meta.title, order: Number(meta.order), body };
+      return { slug: file.replace(/\.md$/, ''), title: meta.title, order: Number(meta.order), body: includes(body, checkout(version), version.ref) };
     })
     .sort((a, b) => a.order - b.order);
   const target = `${out}/docs/${version.name}`;
