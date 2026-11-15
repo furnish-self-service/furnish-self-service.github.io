@@ -1,4 +1,15 @@
 /* The homepage. Shared tokens and components are in site.css. */
+:root {
+  /* Marks what only large organizations need; the rest of the page uses furnish's teal. */
+  --amber: #a5660f;
+  --amber-soft: #fbecd2;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --amber: #e9a94a;
+    --amber-soft: #3a2a10;
+  }
+}
 main {
   max-width: 72rem;
   margin: 0 auto;
@@ -182,38 +193,6 @@ section {
   align-items: center;
 }
 
-/* For admins. */
-.admins {
-  border-top: 1px solid var(--line);
-}
-.admin-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: 2.5rem;
-  align-items: start;
-}
-/* The list is longer than the screenshot: the screenshot stays in view beside it. */
-.admin-grid > .window {
-  position: sticky;
-  top: 6rem;
-}
-.admin-list {
-  display: grid;
-  gap: 1.4rem;
-}
-.item {
-  display: flex;
-  gap: 1rem;
-}
-.item h3 {
-  margin: 0.2rem 0 0.3rem;
-  font-size: var(--text-h3);
-}
-.item p {
-  margin: 0;
-  color: var(--ink-soft);
-}
-
 /* Install: one tab per distro family, plain CSS. */
 .install {
   border-top: 1px solid var(--line);
@@ -279,7 +258,8 @@ section {
   /* minmax(0, …): a plain 1fr column grows to fit long code lines and widens the page. */
   .hero,
   .split,
-  .admin-grid,
+  .path-grid,
+  .pillar,
   .feature.wide {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -323,5 +303,311 @@ section {
 @media (max-width: 40rem) {
   .platforms a {
     font-size: var(--text-small);
+  }
+}
+
+/* "It runs on the systems you already have": a switch between the two sizes, and the systems
+   around furnish. Plain CSS: the radio buttons decide, through :has(), what is highlighted. */
+.sizes {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-bottom: 1.75rem;
+  padding: 0.3rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.sizes input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.sizes label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 650;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.sizes input:checked + label {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+#size-large:checked + label {
+  background: var(--amber);
+}
+.sizes input:focus-visible + label {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.map {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(11rem, 14rem) minmax(0, 1fr);
+  grid-auto-flow: dense;
+  gap: 1rem 3rem;
+  align-items: center;
+}
+.core {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
+  padding: 1.5rem 1.25rem;
+  border-radius: calc(var(--radius) * 1.25);
+  background: var(--accent);
+  color: var(--on-accent);
+  text-align: center;
+  box-shadow: var(--shadow-raised);
+}
+.core img {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 14px;
+  background: var(--canvas);
+  padding: 0.3rem;
+}
+.core p {
+  margin: 0.6rem 0 0;
+}
+.core strong {
+  font: 700 1.35rem/1.1 var(--font-display);
+}
+.core .core-note {
+  font-size: var(--text-small);
+  opacity: 0.85;
+}
+.node {
+  position: relative;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: opacity 0.25s, filter 0.25s, border-color 0.25s;
+}
+.node.left {
+  grid-column: 1;
+}
+.node.right {
+  grid-column: 3;
+}
+.node.large-only {
+  border-left-color: var(--amber);
+}
+.node h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.35rem;
+  font-size: var(--text);
+}
+.node p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--text-small);
+}
+.tier {
+  display: inline-block;
+  margin-top: 0.55rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--amber-soft);
+  color: var(--amber);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+/* The line from each system to furnish. */
+.node::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 3rem;
+  border-top: 2px solid var(--line-strong);
+}
+.node.left::after {
+  left: 100%;
+}
+.node.right::after {
+  right: 100%;
+}
+.node.large-only::after {
+  border-top-style: dashed;
+}
+.fit:has(#size-small:checked) .node.large-only {
+  opacity: 0.38;
+  filter: grayscale(1);
+}
+.fit:has(#size-large:checked) .node.large-only::after {
+  border-top: 2px solid var(--amber);
+}
+.map-note {
+  max-width: 44rem;
+  margin: 1.75rem 0 0;
+  color: var(--ink-soft);
+  font-size: var(--text-intro);
+}
+.fit:has(#size-small:checked) .large-note,
+.fit:has(#size-large:checked) .small-note {
+  display: none;
+}
+
+/* The two paths: small teams and large organizations. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.6rem !important;
+  font-size: var(--text-small) !important;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-ink) !important;
+}
+.large .eyebrow {
+  color: var(--amber) !important;
+}
+.path-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+/* Numbered: the setup is a sequence. */
+.setup {
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1.5rem;
+}
+.setup li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3.25rem;
+}
+.setup li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -0.1rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 1.05rem/1 var(--font-display);
+}
+.setup h3 {
+  margin: 0 0 0.3rem;
+  font-size: var(--text-h3);
+}
+.setup p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+.extras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  margin: 2.25rem 0 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.extras li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-soft);
+  font-size: var(--text-small);
+}
+.extras .icon {
+  color: var(--accent);
+}
+.large {
+  position: relative;
+}
+/* The large-organization path sits on a band of its own, marked in amber. */
+.large::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Full width without widening the page: the image extends sideways beyond the box (outset). */
+  border-image: linear-gradient(var(--amber) 0 3px, var(--amber-soft) 3px, transparent 22rem) fill 0 / 0 / 0 100vmax;
+}
+.pillar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 2.5rem;
+  align-items: start;
+  padding: 2.25rem 0;
+  border-top: 1px solid var(--line);
+}
+.pillar:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+.pillar h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.9rem;
+  font-size: var(--text-h3);
+}
+.pillar h3 .icon {
+  color: var(--amber);
+}
+.pillar ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.7rem;
+  color: var(--ink-soft);
+}
+.code-card.report pre {
+  font-size: var(--text-code);
+}
+.more {
+  margin: 0.5rem 0 0;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 60rem) {
+  .map {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  .core,
+  .node.left,
+  .node.right {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .core {
+    margin-bottom: 0.5rem;
+  }
+  .node::after {
+    display: none;
+  }
+}
+@media (max-width: 40rem) {
+  .sizes label {
+    padding: 0.5rem 0.8rem;
+    font-size: var(--text-small);
+    white-space: nowrap;
+  }
+}
+@media (max-width: 60rem) {
+  /* After the rules above, which would otherwise win. */
+  .path-grid,
+  .pillar {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

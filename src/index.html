@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>furnish: the uncomplicated self-service app for big and small organizations</title>
-  <meta name="description" content="Keep the apps you approve in a git repository. People on Windows, macOS and Linux install them with one click, and furnish keeps them updated with each system's own package manager. There is no server to run." />
+  <meta name="description" content="A self-service app catalog for Windows, macOS and Linux that uses the systems you already run: a git server for the catalog, and in larger organizations your device management, sign-in, load balancer and log system." />
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="assets/site.css" />
   <link rel="stylesheet" href="assets/home.css" />
@@ -14,8 +14,9 @@
     <div class="topbar-inner">
       <a class="wordmark" href="./"><img src="assets/logo.svg" alt="" />furnish</a>
       <nav aria-label="Site">
-        <a href="#how"><icon name="git-branch" /><span>How it works</span></a>
-        <a href="#admins"><icon name="users" /><span>For admins</span></a>
+        <a href="#fit"><icon name="server" /><span>How it fits</span></a>
+        <a href="#small"><icon name="house" /><span>Small teams</span></a>
+        <a href="#large"><icon name="building-2" /><span>Large organizations</span></a>
         <a href="docs/"><icon name="book-open" /><span>Docs</span></a>
         <a href="https://github.com/furnish-self-service/furnish"><icon name="terminal" /><span>Source</span></a>
       </nav>
@@ -33,13 +34,13 @@
           <a href="#install" data-tab="t-apt"><icon name="linux" />Linux</a>
         </nav>
         <p class="lead">
-          Keep the apps you approve in a git repository. People install them with one click, and furnish keeps them
-          updated with each system's own package manager. There is no server to run. Larger organizations add a
-          policy to preset collections, lock settings and let people without administrator rights install.
+          People install the apps you approved with one click, and furnish keeps them updated with each system's own
+          package manager. The catalog is a git repository on your git server. Larger organizations connect the
+          systems they already operate: device management, sign-in, the load balancer and the log system.
         </p>
         <div class="cta">
-          <a class="button primary" href="#install"><icon name="download" />Install the alpha</a>
-          <a class="button secondary" href="docs/"><icon name="book-open" />Read the docs</a>
+          <a class="button primary" href="#small"><icon name="house" />Small teams</a>
+          <a class="button secondary" href="#large"><icon name="building-2" />Large organizations</a>
         </div>
       </div>
       <figure class="window hero-shot">
@@ -52,42 +53,149 @@
       </figure>
     </section>
 
-    <section id="how" class="how">
+    <section id="fit" class="fit">
       <div class="section-head">
-        <h2>How an app gets into the catalog</h2>
-        <p>Each app is one file in a git repository, written in <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format. furnish clones the repository on every computer and pulls changes every 30 minutes.</p>
+        <h2>It runs on the systems you already have</h2>
+        <p>furnish brings no server of its own. Each computer pulls the catalog from git and installs with the system's package manager. Choose your size to see which of your systems furnish uses.</p>
       </div>
-      <div class="split">
-        <div class="code-card">
-          <p class="file"><icon name="git-branch" />apps/gimp.dsc.yaml</p>
-<pre><code><span class="k">metadata:</span>
-  <span class="k">furnish:</span>
-    <span class="k">description:</span> <span class="s">Image editor for photo retouching, …</span>
-    <span class="k">categories:</span> [<span class="s">Graphics</span>, <span class="s">Photo</span>]
-    <span class="k">icon:</span> <span class="s">icons/gimp.svg</span>
-    <span class="k">recommended:</span> <span class="x">"[equals(parameters('role'), 'design')]"</span>
-<span class="k">resources:</span>
-  - <span class="k">name:</span> <span class="s">gimp</span>
-    <span class="k">type:</span> <span class="s">Furnish/Package</span>
-    <span class="k">condition:</span> <span class="x">"[not(equals(context().os.family, 'Windows'))]"</span>
-    <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">gimp</span> }
-  - <span class="k">name:</span> <span class="s">gimp (winget)</span>
-    <span class="k">type:</span> <span class="s">Furnish/Package</span>
-    <span class="k">condition:</span> <span class="x">"[equals(context().os.family, 'Windows')]"</span>
-    <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">GIMP.GIMP.3</span> }</code></pre>
-          <ol class="steps">
-            <li>Describe the app: which package to install, with which package manager, on which systems.</li>
-            <li>Push the file to the collection's repository.</li>
-            <li>Everyone with the collection sees the app and can install it with their system's package manager.</li>
-          </ol>
+      <div class="sizes" role="radiogroup" aria-label="Organization size">
+        <input type="radio" name="size" id="size-small" checked /><label for="size-small"><icon name="house" />Small team</label>
+        <input type="radio" name="size" id="size-large" /><label for="size-large"><icon name="building-2" />Large organization</label>
+      </div>
+      <div class="map">
+        <div class="core">
+          <img src="assets/logo.svg" alt="" />
+          <p><strong>furnish</strong> on every computer</p>
+          <p class="core-note">a desktop app and a command, no central server</p>
         </div>
-        <figure class="window">
-          <img src="images/app-detail.webp" width="2360" height="1520" loading="lazy" alt="GIMP's page in furnish: description, install button and a preview of the exact command it will run." />
-        </figure>
+        <article class="node both left">
+          <h3><icon name="git-branch" />Your git server</h3>
+          <p>GitHub, GitLab, Gitea, Forgejo or any server git reaches over HTTPS or SSH. One repository is the catalog; private ones work with a token or an SSH key.</p>
+        </article>
+        <article class="node both left">
+          <h3><icon name="package" />The systems' package managers</h3>
+          <p>apt, dnf, zypper, pacman, Nix, Homebrew and winget, and .deb, .rpm, .pkg, .dmg, .msi and .exe installers kept in the repository.</p>
+        </article>
+        <article class="node large-only left">
+          <h3><icon name="shield-check" />Device management</h3>
+          <p>A policy from Intune, Group Policy, an MDM profile or a file in /etc decides which collections people get and locks settings.</p>
+          <span class="tier">Large organizations</span>
+        </article>
+        <article class="node large-only right">
+          <h3><icon name="key-round" />Single sign-on</h3>
+          <p>Your OpenID Connect provider, such as Entra ID, Keycloak or Authentik. People sign in once; furnish uses the sign-in for git and for reports.</p>
+          <span class="tier">Large organizations</span>
+        </article>
+        <article class="node large-only right">
+          <h3><icon name="network" />Load balancer or reverse proxy</h3>
+          <p>A furnish address behind Caddy, nginx, Traefik, Envoy or HAProxy, with tested configurations. It forwards git's read requests for the listed repositories only; the git server stays internal.</p>
+          <span class="tier">Large organizations</span>
+        </article>
+        <article class="node large-only right">
+          <h3><icon name="scroll-text" />Log system</h3>
+          <p>Vector passes furnish's reports to Loki, Elasticsearch, Splunk or a file. A Grafana dashboard comes with it.</p>
+          <span class="tier">Large organizations</span>
+        </article>
       </div>
+      <p class="map-note small-note">A small team needs a git repository and furnish on each computer. People who are administrators of their computers install what they need; updates arrive by themselves.</p>
+      <p class="map-note large-note">A large organization adds what it already operates: rules from device management, sign-in from its identity provider, a proxy behind its load balancer and reports into its log system.</p>
     </section>
 
-    <section class="features" aria-label="Features">
+    <section id="small" class="path small">
+      <div class="section-head">
+        <p class="eyebrow"><icon name="house" />Small teams</p>
+        <h2>Running in an afternoon</h2>
+        <p>For a team whose people manage their own computers. There is nothing to host and no directory to connect.</p>
+      </div>
+      <div class="path-grid">
+        <ol class="setup">
+          <li>
+            <h3>Put your apps in a git repository</h3>
+            <p>One short file per app says which package to install on which system. Start from the <a href="https://github.com/furnish-self-service/self-service-example">example collection</a> with ten real apps.</p>
+          </li>
+          <li>
+            <h3>Install furnish on each computer</h3>
+            <p>From the signed package repository on Linux, or the download for macOS and Windows. <a href="#install">Install instructions</a></p>
+          </li>
+          <li>
+            <h3>Add the repository</h3>
+            <p>Paste its URL on the Collections page, or run <code>furnish collection add &lt;url&gt;</code>. furnish pulls changes every 30 minutes and installs updates when the computer isn't busy.</p>
+          </li>
+        </ol>
+        <figure class="window"><img src="images/private-collection.webp" width="2360" height="1520" loading="lazy" alt="The Collections page with the form for adding a collection, including the login fields for a private repository." /></figure>
+      </div>
+      <ul class="extras">
+        <li><icon name="file-check" /><span><code>furnish check</code> in your repository's CI finds broken app files before anyone installs them.</span></li>
+        <li><icon name="history" /><span>When an install fails, furnish offers the version that last worked.</span></li>
+        <li><icon name="languages" /><span>The app follows the system's language, English or German.</span></li>
+      </ul>
+    </section>
+
+    <section id="large" class="path large">
+      <div class="section-head">
+        <p class="eyebrow"><icon name="building-2" />Large organizations</p>
+        <h2>Rules your device management enforces, reports your log system keeps</h2>
+        <p>furnish uses your device management, identity provider, load balancer and log system, so it fits the processes you already have for compliance and operations.</p>
+      </div>
+
+      <div class="pillar">
+        <div>
+          <h3><icon name="shield-check" />Enforce what people get</h3>
+          <ul>
+            <li>A policy from your device management presets collections people can't remove, answers their questions, locks settings and installs apps on first start.</li>
+            <li>People without administrator rights install through the furnish service, which accepts an app's name and the option values it declares, nothing else. You choose the group that may use it.</li>
+            <li>Preset collections only move to commits signed with your SSH keys, and never back to an older one.</li>
+            <li>Your organization's name, logo and color replace furnish's.</li>
+          </ul>
+        </div>
+        <figure class="window"><img src="images/branded.webp" width="2360" height="1520" loading="lazy" alt="furnish branded as Acme Apps, with an orange accent color and the organization's logo." /></figure>
+      </div>
+
+      <div class="pillar">
+        <div>
+          <h3><icon name="scroll-text" />Keep an audit trail</h3>
+          <ul>
+            <li>furnish reports each install, update, uninstall and fallback with its outcome, the error, the device and the time. The proxy adds the user from the sign-in, so a computer can't report under someone else's name.</li>
+            <li>Reports go through Vector to your log system. The included Grafana dashboard shows failures per app, the furnish versions in use and devices that stopped reporting.</li>
+            <li>Reports are off until you turn them on, for failures only or for everything, and you can lock the choice. Works councils can review exactly which fields are sent.</li>
+          </ul>
+        </div>
+        <div class="code-card report">
+          <p class="file"><icon name="scroll-text" />one report, as your log system receives it</p>
+<pre><code>{
+  <span class="k">"time"</span>: <span class="s">"2026-11-15T08:03:06Z"</span>,
+  <span class="k">"user"</span>: <span class="s">"alice@acme.example"</span>,
+  <span class="k">"device"</span>: <span class="s">"7f3a91c2e4b0d5f6"</span>,
+  <span class="k">"os"</span>: <span class="s">"windows"</span>, <span class="k">"furnish"</span>: <span class="s">"0.1.0+alpha.72"</span>,
+  <span class="k">"event"</span>: <span class="s">"update"</span>, <span class="k">"outcome"</span>: <span class="s">"failed"</span>,
+  <span class="k">"app"</span>: <span class="s">"acme-it/vpn"</span>, <span class="k">"trigger"</span>: <span class="s">"update"</span>,
+  <span class="k">"error"</span>: <span class="s">"msiexec exited with 1603"</span>
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="pillar">
+        <div>
+          <h3><icon name="network" />Handle many computers</h3>
+          <ul>
+            <li>There is no catalog server to scale: every computer pulls from git, so your git server, or a mirror of it, carries the load.</li>
+            <li>Computers download only what they use: the history without old file contents, and installers only for the apps installed there.</li>
+            <li>A furnish address such as furnish.myorg.tld behind your load balancer replaces the VPN. People sign in with their organization account; the proxy forwards git's read requests for your listed repositories with a read-only deploy token.</li>
+            <li>An onboarding e-mail with a <code>furnish://</code> link adds the address after one confirmation, and the address can install the VPN client or other first apps.</li>
+          </ul>
+        </div>
+        <figure class="window"><img src="images/sign-in.webp" width="2360" height="1520" loading="lazy" alt="furnish asking the person to sign in to Acme again." /></figure>
+      </div>
+
+      <p class="more">The <a href="docs/alpha/admins.html">admin guide</a> covers the policy, the service and reports; the <a href="docs/alpha/endpoint.html">endpoint setup</a> has the proxy configurations that CI tests.</p>
+    </section>
+
+    <section id="people" class="people">
+      <div class="section-head">
+        <h2>For the people using it</h2>
+        <p>People find the apps you approved, see what installing one will do, and get on with their work while furnish installs and updates in the background.</p>
+      </div>
+      <div class="features">
       <article class="feature wide">
         <div>
           <h3><icon name="list-checks" />A preview and live progress for each step</h3>
@@ -125,49 +233,41 @@
         <p>furnish follows the system's language, and people can switch it on the Collections page. Organizations can set it for everyone.</p>
         <figure class="window"><img src="images/discover-de.webp" width="2360" height="1520" loading="lazy" alt="The Discover page in German, with recommended apps." /></figure>
       </article>
+      </div>
     </section>
 
-    <section id="admins" class="admins">
+    <section id="how" class="how">
       <div class="section-head">
-        <h2>For IT administrators</h2>
-        <p>A policy decides which collections people get and what they may change. furnish reads it from each system's place for managed settings: a file on Linux, an MDM profile on macOS, Group Policy or Intune on Windows.</p>
+        <h2>How an app gets into the catalog</h2>
+        <p>Each app is one file in a git repository, written in <a href="https://learn.microsoft.com/powershell/dsc/overview">DSC</a>, Microsoft's open-source configuration format. furnish clones the repository on every computer and pulls changes every 30 minutes.</p>
       </div>
-      <div class="admin-grid">
-        <div class="admin-list">
-          <div class="item">
-            <icon name="shield-check" />
-            <div><h3>Installs without administrator rights</h3><p>The furnish service installs the apps of your collections for people who aren't administrators. It accepts an app's name and option values, nothing else.</p></div>
-          </div>
-          <div class="item">
-            <icon name="key-round" />
-            <div><h3>Sign-in without a VPN</h3><p>Give furnish an address such as furnish.myorg.tld. People sign in with your organization's account, and furnish fetches your collections through a proxy that forwards only git's read requests. Your git server stays internal.</p></div>
-          </div>
-          <div class="item">
-            <icon name="lock" />
-            <div><h3>Signed collections</h3><p>Preset collections can be limited to commits signed with your SSH keys. furnish's own Linux packages come from a signed APT and RPM repository.</p></div>
-          </div>
-          <div class="item">
-            <icon name="users" />
-            <div><h3>Preset collections and locked settings</h3><p>Add collections for everyone, answer their questions, install apps on first start, and lock any setting.</p></div>
-          </div>
-          <div class="item">
-            <icon name="activity" />
-            <div><h3>Reports to your log system</h3><p>furnish can report which apps it installed, updated or removed and whether that worked, with the person's sign-in. Your furnish address passes the reports to Vector, which writes them to Loki, Elasticsearch, Splunk or a file. A Grafana dashboard comes with it. Reports stay off until you turn them on.</p></div>
-          </div>
-          <div class="item">
-            <icon name="file-check" />
-            <div><h3>Checks before people install</h3><p><code>furnish check</code> finds app files that don't load, missing installers and conditions that don't evaluate, and shows what runs on each system. Run it in your repository's CI on every change.</p></div>
-          </div>
-          <div class="item">
-            <icon name="hard-drive-download" />
-            <div><h3>Only what each computer needs</h3><p>Computers download a collection's installers only for the apps they install, and the files of earlier versions only when they need one.</p></div>
-          </div>
-          <div class="item">
-            <icon name="palette" />
-            <div><h3>Your branding</h3><p>furnish can show your organization's name, logo and color. It derives the other shades and keeps text readable in light and dark mode.</p></div>
-          </div>
+      <div class="split">
+        <div class="code-card">
+          <p class="file"><icon name="git-branch" />apps/gimp.dsc.yaml</p>
+<pre><code><span class="k">metadata:</span>
+  <span class="k">furnish:</span>
+    <span class="k">description:</span> <span class="s">Image editor for photo retouching, …</span>
+    <span class="k">categories:</span> [<span class="s">Graphics</span>, <span class="s">Photo</span>]
+    <span class="k">icon:</span> <span class="s">icons/gimp.svg</span>
+    <span class="k">recommended:</span> <span class="x">"[equals(parameters('role'), 'design')]"</span>
+<span class="k">resources:</span>
+  - <span class="k">name:</span> <span class="s">gimp</span>
+    <span class="k">type:</span> <span class="s">Furnish/Package</span>
+    <span class="k">condition:</span> <span class="x">"[not(equals(context().os.family, 'Windows'))]"</span>
+    <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">gimp</span> }
+  - <span class="k">name:</span> <span class="s">gimp (winget)</span>
+    <span class="k">type:</span> <span class="s">Furnish/Package</span>
+    <span class="k">condition:</span> <span class="x">"[equals(context().os.family, 'Windows')]"</span>
+    <span class="k">properties:</span> { <span class="k">name:</span> <span class="s">GIMP.GIMP.3</span> }</code></pre>
+          <ol class="steps">
+            <li>Describe the app: which package to install, with which package manager, on which systems.</li>
+            <li>Push the file to the collection's repository.</li>
+            <li>Everyone with the collection sees the app and can install it with their system's package manager.</li>
+          </ol>
         </div>
-        <figure class="window"><img src="images/branded.webp" width="2360" height="1520" loading="lazy" alt="furnish branded as Acme Apps, with an orange accent color and the organization's logo." /></figure>
+        <figure class="window">
+          <img src="images/app-detail.webp" width="2360" height="1520" loading="lazy" alt="GIMP's page in furnish: description, install button and a preview of the exact command it will run." />
+        </figure>
       </div>
     </section>
 

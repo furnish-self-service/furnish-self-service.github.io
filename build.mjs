@@ -17,7 +17,7 @@ writeFileSync(`${out}/.nojekyll`, '');
 
 /** `<icon name="x" />` → the inline Lucide SVG (decorative). */
 function icons(html) {
-  return html.replace(/<icon name="([a-z-]+)" \/>/g, (_, name) =>
+  return html.replace(/<icon name="([a-z0-9-]+)" \/>/g, (_, name) =>
     readFileSync(`assets/icons/${name}.svg`, 'utf8')
       .replace(/<!--.*?-->\s*/s, '')
       .replace('<svg', '<svg aria-hidden="true"')
