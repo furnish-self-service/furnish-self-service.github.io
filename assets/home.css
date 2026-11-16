@@ -350,7 +350,12 @@ section {
 .core {
   grid-column: 2;
   grid-row: 1 / span 3;
-  align-self: center;
+  /* As tall as the three rows, so every line from the sides reaches it. */
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 1.5rem 1.25rem;
   border-radius: calc(var(--radius) * 1.25);
   background: var(--accent);
