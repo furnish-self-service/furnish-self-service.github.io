@@ -93,7 +93,7 @@
         </article>
         <article class="node large-only right">
           <h3><icon name="scroll-text" />Log system</h3>
-          <p>Vector passes furnish's reports to Loki, Elasticsearch, Splunk or a file. A Grafana dashboard comes with it.</p>
+          <p>Reports arrive as OpenTelemetry logs in the log system you already run. A Grafana dashboard comes with it.</p>
           <span class="tier">Large organizations</span>
         </article>
       </div>
@@ -184,20 +184,21 @@
           <h3><icon name="scroll-text" />Keep an audit trail</h3>
           <ul>
             <li>furnish reports each install, update, uninstall and fallback with its outcome, the error, the device and the time. The proxy adds the user from the sign-in, so a computer can't report under someone else's name.</li>
-            <li>Reports go through Vector to your log system. The included Grafana dashboard shows failures per app, the furnish versions in use and devices that stopped reporting.</li>
+            <li>Reports are OpenTelemetry logs, so any log system that takes them can keep them. The included Grafana dashboard shows failures per app, the furnish versions in use and devices that stopped reporting.</li>
             <li>Reports are off until you turn them on, and you can lock the choice. Works councils can review exactly what is sent.</li>
           </ul>
         </div>
         <div class="code-card report">
           <p class="file"><icon name="scroll-text" />one report, as your log system receives it</p>
 <pre><code>{
-  <span class="k">"time"</span>: <span class="s">"2026-11-15T08:03:06Z"</span>,
-  <span class="k">"user"</span>: <span class="s">"alice@acme.example"</span>,
-  <span class="k">"device"</span>: <span class="s">"7f3a91c2e4b0d5f6"</span>,
-  <span class="k">"os"</span>: <span class="s">"windows"</span>, <span class="k">"furnish"</span>: <span class="s">"0.1.0+alpha.72"</span>,
-  <span class="k">"event"</span>: <span class="s">"update"</span>, <span class="k">"outcome"</span>: <span class="s">"failed"</span>,
-  <span class="k">"app"</span>: <span class="s">"acme-it/vpn"</span>, <span class="k">"trigger"</span>: <span class="s">"update"</span>,
-  <span class="k">"error"</span>: <span class="s">"msiexec exited with 1603"</span>
+  <span class="k">"time"</span>: <span class="s">"2026-11-15T08:03:06Z"</span>, <span class="k">"severity"</span>: <span class="s">"ERROR"</span>,
+  <span class="k">"body"</span>: <span class="s">"update acme-it/vpn failed"</span>,
+  <span class="k">"user.email"</span>: <span class="s">"alice@acme.example"</span>,
+  <span class="k">"device.id"</span>: <span class="s">"7f3a91c2e4b0d5f6"</span>,
+  <span class="k">"os.type"</span>: <span class="s">"windows"</span>, <span class="k">"service.version"</span>: <span class="s">"0.1.0+alpha.72"</span>,
+  <span class="k">"furnish.event"</span>: <span class="s">"update"</span>, <span class="k">"furnish.outcome"</span>: <span class="s">"failed"</span>,
+  <span class="k">"furnish.app"</span>: <span class="s">"acme-it/vpn"</span>, <span class="k">"furnish.trigger"</span>: <span class="s">"update"</span>,
+  <span class="k">"error.message"</span>: <span class="s">"msiexec exited with 1603"</span>
 }</code></pre>
         </div>
       </div>
