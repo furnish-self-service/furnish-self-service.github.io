@@ -115,7 +115,7 @@
           </li>
           <li>
             <h3>Install furnish on each computer</h3>
-            <p>The download for Windows or macOS, or the signed package repository on Linux. <a href="#install">Install instructions</a></p>
+            <p>The download for Windows, Homebrew on macOS, the signed package repository on Linux. <a href="#install">Install instructions</a></p>
           </li>
           <li>
             <h3>Add the repository</h3>
@@ -308,8 +308,10 @@
   <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. A new alpha means a new download; furnish doesn't update itself on Windows yet.</p>
 </div>
 <div class="panel" id="p-mac">
-  <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg"><icon name="download" />Download for Mac with Apple silicon</a></p>
-  <p>The alpha isn't signed by Apple yet, so macOS blocks it at first: open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. A new alpha means a new download; furnish doesn't update itself on macOS yet. For Intel Macs, build it with Xcode's command line tools, Rust and Node.js:</p>
+  <p>On a Mac with Apple silicon, install furnish with Homebrew. <code>brew upgrade</code> brings each new alpha.</p>
+<pre><code>brew install --cask furnish-self-service/tap/furnish</code></pre>
+  <p class="download"><a class="button secondary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg"><icon name="download" />Or download for Mac with Apple silicon</a></p>
+  <p>The alpha isn't signed by Apple yet, so macOS blocks it at first: open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. macOS asks again after each update. Without Homebrew, a new alpha means a new download. For Intel Macs, build it with Xcode's command line tools, Rust and Node.js:</p>
 <pre><code>git clone https://github.com/furnish-self-service/furnish.git
 cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre>
 </div>
