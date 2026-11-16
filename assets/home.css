@@ -18,8 +18,15 @@ main {
 section {
   padding: 4.5rem 0;
 }
+/* Running text ends where the map's middle column ends (left column + gap + furnish box,
+   see .map): about 75 characters, on a line the layout already has. Never narrower than
+   40rem, so tablets don't get a thin column. */
+.section-head,
+.map-note,
+.then {
+  max-width: max(50% + 7rem, 40rem);
+}
 .section-head {
-  max-width: 44rem;
   margin-bottom: 2.25rem;
 }
 .section-head h2 {
@@ -247,7 +254,6 @@ section {
   margin: 0;
 }
 .then {
-  max-width: 50rem;
   color: var(--ink-soft);
 }
 
@@ -446,7 +452,6 @@ section {
   border-top: 2px solid var(--amber);
 }
 .map-note {
-  max-width: 44rem;
   margin: 1.75rem 0 0;
   color: var(--ink-soft);
   font-size: var(--text-intro);
