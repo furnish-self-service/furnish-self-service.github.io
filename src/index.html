@@ -306,15 +306,20 @@
         <input type="radio" name="os" id="t-linux" /><label for="t-linux"><icon name="linux" />Linux</label>
 <div class="panel" id="p-win">
   <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-windows.msi"><icon name="download" />Download for Windows (64-bit)</a></p>
-  <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. A new alpha means a new download; furnish doesn't update itself on Windows yet.</p>
+  <p>The alpha isn't code-signed yet, so Windows SmartScreen warns about it: choose <strong>More info → Run anyway</strong>. furnish updates itself.</p>
 </div>
 <div class="panel" id="p-mac">
-  <p>On a Mac with Apple silicon, install furnish with Homebrew. <code>brew upgrade</code> brings each new alpha.</p>
-<pre><code>brew install --cask furnish-self-service/tap/furnish</code></pre>
-  <p class="download"><a class="button secondary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg"><icon name="download" />Or download for Mac with Apple silicon</a></p>
-  <p>The alpha isn't signed by Apple yet, so macOS blocks it at first: open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. macOS asks again after each update. Without Homebrew, a new alpha means a new download. For Intel Macs, build it with Xcode's command line tools, Rust and Node.js:</p>
+  <p>The alpha isn't signed by Apple yet, so macOS blocks it at first: open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. macOS may ask again after an update. Pick how to install it:</p>
+  <details open><summary>Homebrew, on a Mac with Apple silicon</summary>
+  <p><code>brew upgrade</code> brings each new alpha.</p>
+<pre><code>brew install --cask furnish-self-service/tap/furnish</code></pre></details>
+  <details><summary>Download, on a Mac with Apple silicon</summary>
+  <p>furnish updates itself.</p>
+  <p class="download"><a class="button secondary" href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg"><icon name="download" />Download for Mac with Apple silicon</a></p></details>
+  <details><summary>Intel Macs</summary>
+  <p>Build it with Xcode's command line tools, Rust and Node.js:</p>
 <pre><code>git clone https://github.com/furnish-self-service/furnish.git
-cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre>
+cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre></details>
 </div>
 <div class="panel" id="p-linux">
   <p>furnish comes from a signed package repository, so updates arrive with the system's other updates. Pick the commands for your distribution:</p>

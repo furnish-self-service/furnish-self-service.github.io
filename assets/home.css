@@ -619,7 +619,7 @@ section {
   }
 }
 
-/* Install tabs: system logos in the labels; the Linux panel's distributions fold. */
+/* Install tabs: system logos in the labels; the macOS and Linux panels' ways to install fold. */
 .tabs label .icon {
   width: 1.1em;
   height: 1.1em;
@@ -629,6 +629,7 @@ section {
   align-items: center;
   gap: 0.45rem;
 }
+#p-mac details,
 #p-linux details {
   margin-top: 0.75rem;
   border: 1px solid var(--line);
@@ -636,10 +637,13 @@ section {
   padding: 0.6rem 0.9rem;
   background: var(--surface);
 }
+#p-mac summary,
 #p-linux summary {
   cursor: pointer;
   font-weight: 650;
 }
+#p-mac details pre,
+#p-mac details p,
 #p-linux details pre {
   margin: 0.6rem 0 0;
 }
