@@ -342,7 +342,10 @@ sudo pacman -Syu furnish</code></pre></details>
 inputs.furnish.url = "github:furnish-self-service/furnish";
 
 # configuration.nix, with furnish.nixosModules.default imported
-services.furnish.enable = true;</code></pre></details>
+services.furnish.enable = true;
+# furnish's binary cache; without it, Nix builds furnish from source
+nix.settings.extra-substituters = [ "https://furnish.cachix.org" ];
+nix.settings.extra-trusted-public-keys = [ "furnish.cachix.org-1:2kYBYAHpsUEykPAKjJ9a6IlwDPwjnq565I6cPtASA6k=" ];</code></pre></details>
 </div>
       <p class="then">Then add your organization's furnish address or a collection's git URL on the Collections page. To try furnish, add the example collection: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
     </section>
