@@ -100,11 +100,16 @@ for (const version of versions) {
         const id = inner.replace(/<[^>]+>/g, '').toLowerCase().replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
         return `<h${level} id="${id}">${inner}</h${level}>`;
       });
+    // "On this page": the page's h2 and h3 headings, with the anchors set above, after the title.
+    const headings = [...content.matchAll(/<h([23]) id="([^"]+)">(.*?)<\/h\1>/g)];
+    const toc = headings.length === 0 ? '' : `<nav class="toc" aria-label="On this page"><div><p>On this page</p><ul>${headings
+      .map(([, level, id, inner]) => `<li class="h${level}"><a href="#${id}">${inner.replace(/<(?!\/?code)[^>]+>/g, '')}</a></li>`)
+      .join('')}</ul></div></nav>`;
     const html = template
       .replaceAll('{{title}}', page.title)
-      .replace('{{nav}}', nav)
+            .replace('{{nav}}', nav)
       .replace('{{versions}}', options)
-      .replace('{{content}}', content)
+      .replace('{{content}}', () => content.replace(/<\/h1>/, (h) => h + toc))
       .replace('{{source}}', `https://github.com/furnish-self-service/furnish/blob/${version.ref}/docs/site/${page.slug}.md`);
     writeFileSync(`${target}/${page.slug}.html`, screenshots(icons(html), `${dir}/images`));
   }
