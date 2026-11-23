@@ -333,7 +333,7 @@ sudo dnf install furnish     # Enterprise Linux 10: enable EPEL and CRB first</c
 <pre><code>sudo zypper addrepo https://furnish-self-service.github.io/furnish/stable/furnish.repo
 sudo zypper install furnish</code></pre></details>
   <details><summary>Arch Linux and other x86-64 distributions</summary>
-  <p>Download the standalone <a href="https://github.com/furnish-self-service/furnish/releases/download/v0.1.0/furnish-linux-x86_64">Furnish CLI</a>. The release includes a <a href="https://github.com/furnish-self-service/furnish/releases/download/v0.1.0/SHA256SUMS">SHA-256 checksum file</a>. From the directory containing both downloads, run</p>
+  <p>Install Git and Git LFS with your distribution’s package manager, then download the standalone <a href="https://github.com/furnish-self-service/furnish/releases/download/v0.1.0/furnish-linux-x86_64">Furnish CLI</a>. The release includes a <a href="https://github.com/furnish-self-service/furnish/releases/download/v0.1.0/SHA256SUMS">SHA-256 checksum file</a>. From the directory containing both downloads, run</p>
 <pre><code>sha256sum --ignore-missing --check SHA256SUMS &amp;&amp; sudo install -m 755 furnish-linux-x86_64 /usr/local/bin/furnish
 furnish --version</code></pre></details>
   <details><summary>NixOS</summary>
