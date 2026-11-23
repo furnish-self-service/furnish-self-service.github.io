@@ -1,3 +1,4 @@
 [
+  { "name": "0.1.0", "label": "0.1.0 (stable)", "ref": "v0.1.0" },
   { "name": "alpha", "label": "alpha (main branch)", "ref": "main" }
 ]
