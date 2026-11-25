@@ -13,7 +13,25 @@ const out = 'dist';
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out);
 cpSync('assets', `${out}/assets`, { recursive: true });
+cpSync('assets/favicon.ico', `${out}/favicon.ico`);
 writeFileSync(`${out}/.nojekyll`, '');
+
+function preview(title, path) {
+  const origin = 'https://furnish-self-service.github.io';
+  const safeTitle = title.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+  return `<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" sizes="any" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="furnish" />
+  <meta property="og:title" content="${safeTitle}" />
+  <meta property="og:url" content="${origin}/${path}" />
+  <meta property="og:image" content="${origin}/assets/logo-512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="furnish armchair logo" />
+  <meta name="twitter:card" content="summary" />`;
+}
 
 /** `<icon name="x" />` → the inline Lucide SVG (decorative). */
 function icons(html) {
@@ -41,7 +59,7 @@ function screenshots(html, dir) {
 
 // The homepage, with the latest version's screenshots.
 const images = `${checkout(latest)}/docs/site/images`;
-writeFileSync(`${out}/index.html`, screenshots(icons(readFileSync('src/index.html', 'utf8')), images));
+writeFileSync(`${out}/index.html`, screenshots(icons(readFileSync('src/index.html', 'utf8').replace('{{preview}}', preview('furnish · Self-service app catalog', ''))), images));
 cpSync(`${checkout(latest)}/docs/site/images`, `${out}/images`, { recursive: true });
 // The open-source components in furnish's installers and their licenses (the footers link it).
 const notices = `${checkout(latest)}/THIRD-PARTY-LICENSES.html`;
@@ -107,7 +125,8 @@ for (const version of versions) {
       .join('')}</ul></div></nav>`;
     const html = template
       .replaceAll('{{title}}', page.title)
-            .replace('{{nav}}', nav)
+      .replace('{{preview}}', () => preview(`${page.title} · furnish docs`, `docs/${version.name}/${page.slug}.html`))
+      .replace('{{nav}}', nav)
       .replace('{{versions}}', options)
       .replace('{{content}}', () => content.replace(/<\/h1>/, (h) => h + toc))
       .replace('{{source}}', `https://github.com/furnish-self-service/furnish/blob/${version.ref}/docs/site/${page.slug}.md`);
@@ -115,5 +134,5 @@ for (const version of versions) {
   }
 }
 const first = `docs/${latest.name}/index.html`;
-writeFileSync(`${out}/docs/index.html`, `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=${latest.name}/index.html"><link rel="canonical" href="/${first}"><a href="${latest.name}/index.html">Docs</a>`);
+writeFileSync(`${out}/docs/index.html`, `<!doctype html><meta charset="utf-8">${preview('furnish docs', first)}<meta http-equiv="refresh" content="0; url=${latest.name}/index.html"><link rel="canonical" href="/${first}"><a href="${latest.name}/index.html">Docs</a>`);
 console.log(`built ${out}/: homepage, docs for ${versions.map((v) => v.name).join(', ')}`);
