@@ -312,12 +312,12 @@
 </div>
 <div class="panel" id="p-mac">
   <p>The app uses ad-hoc signing and has no Apple notarization. If your Mac allows it, open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. macOS may ask again after an update. With Homebrew, <code>brew upgrade</code> brings stable updates; the download updates itself. Pick how to install it:</p>
-  <details open><summary>Homebrew, on a Mac with Apple silicon</summary>
+  <details open><summary>Stable Homebrew cask · Apple silicon · Homebrew installation</summary>
 <pre><code>brew install --cask furnish-self-service/tap/furnish</code></pre></details>
   <details><summary>Download, on a Mac with Apple silicon</summary>
   <p class="download"><a class="button secondary" href="https://furnish-self-service.github.io/furnish/stable/furnish-macos.dmg"><icon name="download" />Stable disk image · Apple silicon</a></p>
   <p><a href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg">Alpha disk image for Apple silicon</a>. Drag Furnish to <code>~/Applications</code> for your account or <code>/Applications</code> for all users. The app follows the installed channel.</p></details>
-  <details><summary>Intel Macs</summary>
+  <details><summary>Stable source build · Intel Macs</summary>
 <pre><code># needs Xcode's command line tools, Rust and Node.js
 git clone --branch v0.1.0 https://github.com/furnish-self-service/furnish.git
 cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre></details>

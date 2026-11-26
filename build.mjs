@@ -95,7 +95,9 @@ for (const version of versions) {
       let text = readFileSync(`${dir}/${file}`, 'utf8');
       // The immutable v0.1.0 tag was written before its downloads went live.
       if (version.ref === 'v0.1.0' && file === 'index.md') {
-        text = text.replace('follow the stable channel once v0.1.0 is published', 'follow the stable channel');
+        const original = 'follow the stable channel once v0.1.0 is published';
+        if (!text.includes(original)) throw new Error(`Missing v0.1.0 release timing in ${file}`);
+        text = text.replace(original, 'follow the stable channel');
       }
       const [, front, body] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/) ?? [];
       if (!front) throw new Error(`${dir}/${file}: needs front matter with title and order`);
@@ -139,4 +141,9 @@ for (const version of versions) {
 }
 const first = `docs/${latest.name}/index.html`;
 writeFileSync(`${out}/docs/index.html`, `<!doctype html><meta charset="utf-8">${preview('furnish docs', first)}<meta http-equiv="refresh" content="0; url=${latest.name}/index.html"><link rel="canonical" href="/${first}"><a href="${latest.name}/index.html">Docs</a>`);
+for (const [, page, anchor] of readFileSync(`${out}/index.html`, 'utf8').matchAll(/href="(docs\/[^"#]+\.html)#([^"]+)"/g)) {
+  if (!readFileSync(`${out}/${page}`, 'utf8').includes(`id="${anchor}"`)) {
+    throw new Error(`Homepage links to missing heading ${page}#${anchor}`);
+  }
+}
 console.log(`built ${out}/: homepage, docs for ${versions.map((v) => v.name).join(', ')}`);
