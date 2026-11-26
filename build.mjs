@@ -98,7 +98,7 @@ function archiveLinks(os, suffix, arch) {
 
 // The homepage, with the latest version's screenshots.
 const images = `${checkout(latest)}/docs/site/images`;
-writeFileSync(`${out}/index.html`, screenshots(icons(readFileSync('src/index.html', 'utf8').replace('{{preview}}', preview('furnish · Self-service app catalog', ''))
+writeFileSync(`${out}/index.html`, screenshots(icons(readFileSync('src/index.html', 'utf8').replaceAll('{{stable-version}}', latest.name).replace('{{preview}}', preview('furnish · Self-service app catalog', ''))
   .replace('{{archives-windows}}', archiveLinks('Windows', 'windows-x86_64_binaries.zip', 'x64'))
   .replace('{{archives-macos}}', archiveLinks('macOS', 'macos-arm64_binaries.tar.gz', 'Apple silicon'))
   .replace('{{archives-linux}}', archiveLinks('Linux', 'linux-x86_64_binaries.tar.gz', 'x86-64'))), images));
