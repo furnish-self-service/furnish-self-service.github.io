@@ -71,29 +71,17 @@ async function releases(path) {
     return null;
   }
 }
-async function alphaRelease() {
-  for (let page = 1; ; page++) {
-    const batch = await releases(`?per_page=50&page=${page}`);
-    if (!batch) return null;
-    const alpha = batch.find(r => r.prerelease && !r.draft && /^v[0-9.]+-alpha[.][0-9]+$/.test(r.tag_name));
-    if (alpha || batch.length < 50) return alpha;
-  }
-}
-const [stable, alpha] = await Promise.all([releases('/latest'), alphaRelease()]);
+const stable = await releases('/latest');
 function archiveLinks(os, suffix, arch) {
-  const links = [];
-  for (const [channel, release] of [['Stable', stable], ['Alpha', alpha]]) {
-    if (!release) continue;
-    const version = release.tag_name.slice(1);
-    if (!/^\d+\.\d+\.\d+(?:-alpha\.\d+)?$/.test(version)) continue;
-    const filename = `furnish_${version}_${suffix}`;
-    if (!release.assets.some(asset => asset.name === filename)) continue;
-    const base = `https://github.com/${repository}/releases/download/${release.tag_name}`;
-    const checksum = release.assets.some(asset => asset.name === 'SHA256SUMS') ? ` · <a href="${base}/SHA256SUMS">SHA-256 checksums</a>` : '';
-    links.push(`<li><a href="${base}/${filename}">${channel} · ${os} ${arch} · ${filename.endsWith('.zip') ? 'ZIP' : 'tar.gz'}</a> · ${version}${checksum}</li>`);
+  const version = stable?.tag_name?.slice(1);
+  const filename = `furnish_${version}_${suffix}`;
+  let download = `<a href="https://github.com/${repository}/releases/latest">Browse release assets</a> for files ending in <code>${suffix}</code>.`;
+  if (version && /^\d+\.\d+\.\d+$/.test(version) && stable.assets.some(asset => asset.name === filename)) {
+    const base = `https://github.com/${repository}/releases/download/${stable.tag_name}`;
+    const checksum = stable.assets.some(asset => asset.name === 'SHA256SUMS') ? ` · <a href="${base}/SHA256SUMS">SHA-256 checksums</a>` : '';
+    download = `<a href="${base}/${filename}">${os} ${arch} · ${filename.endsWith('.zip') ? 'ZIP' : 'tar.gz'}</a> · ${version}${checksum}`;
   }
-  if (!links.length) links.push(`<li><a href="https://github.com/${repository}/releases">Browse release assets</a> for files ending in <code>${suffix}</code>.</li>`);
-  return `<details><summary>Binary archives for packagers · ${arch}</summary><p>CLI and desktop executables for creating your own package. Supply the runtime dependencies and manage updates in your package.</p><ul>${links.join('')}</ul></details>`;
+  return `<details><summary>Binary archives for packagers · ${arch}</summary><p>CLI and desktop executables for creating your own package. Supply the runtime dependencies and manage updates in your package.</p><p>${download}</p></details>`;
 }
 
 // The homepage, with the latest version's screenshots.
