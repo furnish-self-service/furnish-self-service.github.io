@@ -309,6 +309,7 @@
   <p><a href="https://furnish-self-service.github.io/furnish/alpha/furnish-windows.msi">Alpha MSI for all users</a>. Both MSI channels update through Furnish.</p>
   <p><strong>Just for me · Alpha</strong> — Open the newest <a href="https://github.com/furnish-self-service/furnish/releases?q=prerelease%3Atrue">alpha release</a> and download the asset ending in <code>windows-x86_64_user-setup.exe</code>. Run the newer installer to update your account’s copy.</p>
   <p>The MSI has no publisher certificate. If SmartScreen warns and your organization permits installation, choose <strong>More info → Run anyway</strong>.</p>
+  {{archives-windows}}
 </div>
 <div class="panel" id="p-mac">
   <p>The app uses ad-hoc signing and has no Apple notarization. If your Mac allows it, open furnish once, then allow it under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>. macOS may ask again after an update. With Homebrew, <code>brew upgrade</code> brings stable updates; the download updates itself. Pick how to install it:</p>
@@ -321,6 +322,7 @@
 <pre><code># needs Xcode's command line tools, Rust and Node.js
 git clone --branch v0.1.0 https://github.com/furnish-self-service/furnish.git
 cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre></details>
+  {{archives-macos}}
 </div>
 <div class="panel" id="p-linux">
   <p>The stable package repositories install Furnish system-wide and deliver updates through your package manager. For the alpha channel, use <code>/alpha/</code> in place of <code>/stable/</code> in the repository URL. Pick the commands for your distribution:</p>
@@ -350,6 +352,7 @@ services.furnish.enable = true;
 # furnish's binary cache; without it, Nix builds furnish from source
 nix.settings.extra-substituters = [ "https://furnish.cachix.org" ];
 nix.settings.extra-trusted-public-keys = [ "furnish.cachix.org-1:2kYBYAHpsUEykPAKjJ9a6IlwDPwjnq565I6cPtASA6k=" ];</code></pre></details>
+  {{archives-linux}}
 </div>
       <p class="then">Then add your organization's furnish address or a collection's git URL on the Collections page. To try furnish, add the example collection: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
     </section>

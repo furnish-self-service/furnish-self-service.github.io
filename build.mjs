@@ -57,9 +57,37 @@ function screenshots(html, dir) {
   });
 }
 
+// Resolve existing assets at build time so downloads also work without client-side JavaScript.
+const repository = 'furnish-self-service/furnish';
+async function releases(path) {
+  const headers = process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
+  const response = await fetch(`https://api.github.com/repos/${repository}/releases${path}`, { headers });
+  if (!response.ok) throw new Error(`Reading release assets: HTTP ${response.status}`);
+  return response.json();
+}
+const [stable, recent] = await Promise.all([releases('/latest'), releases('?per_page=50')]);
+const alpha = recent.find(r => r.prerelease && !r.draft && /^v[0-9.]+-alpha[.][0-9]+$/.test(r.tag_name));
+function archiveLinks(os, suffix, arch) {
+  const links = [];
+  for (const [channel, release] of [['Stable', stable], ['Alpha', alpha]]) {
+    if (!release) continue;
+    const version = release.tag_name.slice(1);
+    if (!/^\d+\.\d+\.\d+(?:-alpha\.\d+)?$/.test(version)) throw new Error(`Unexpected version ${version}`);
+    const filename = `furnish_${version}_${suffix}`;
+    if (!release.assets.some(asset => asset.name === filename)) continue;
+    const base = `https://github.com/${repository}/releases/download/${release.tag_name}`;
+    const checksum = release.assets.some(asset => asset.name === 'SHA256SUMS') ? ` · <a href="${base}/SHA256SUMS">SHA-256 checksums</a>` : '';
+    links.push(`<li><a href="${base}/${filename}">${channel} · ${os} ${arch} · ${filename.endsWith('.zip') ? 'ZIP' : 'tar.gz'}</a> · ${version}${checksum}</li>`);
+  }
+  return links.length ? `<details><summary>Binary archives for packagers · ${arch}</summary><p>CLI and desktop executables for creating your own package. Supply the runtime dependencies and manage updates in your package.</p><ul>${links.join('')}</ul></details>` : '';
+}
+
 // The homepage, with the latest version's screenshots.
 const images = `${checkout(latest)}/docs/site/images`;
-writeFileSync(`${out}/index.html`, screenshots(icons(readFileSync('src/index.html', 'utf8').replace('{{preview}}', preview('furnish · Self-service app catalog', ''))), images));
+writeFileSync(`${out}/index.html`, screenshots(icons(readFileSync('src/index.html', 'utf8').replace('{{preview}}', preview('furnish · Self-service app catalog', ''))
+  .replace('{{archives-windows}}', archiveLinks('Windows', 'windows-x86_64_binaries.zip', 'x64'))
+  .replace('{{archives-macos}}', archiveLinks('macOS', 'macos-arm64_binaries.tar.gz', 'Apple silicon'))
+  .replace('{{archives-linux}}', archiveLinks('Linux', 'linux-x86_64_binaries.tar.gz', 'x86-64'))), images));
 cpSync(`${checkout(latest)}/docs/site/images`, `${out}/images`, { recursive: true });
 // The open-source components in furnish's installers and their licenses (the footers link it).
 const notices = `${checkout(latest)}/THIRD-PARTY-LICENSES.html`;
