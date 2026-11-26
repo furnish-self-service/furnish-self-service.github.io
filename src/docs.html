@@ -41,6 +41,12 @@
       <a href="/licenses.html">Open-source licenses in furnish</a>
     </div>
   </footer>
+  {{bookmarks}}
+  <script>
+    if (matchMedia('(max-width: 52rem)').matches) {
+      document.querySelector('.pages details[open]')?.removeAttribute('open');
+    }
+  </script>
   <script src="../../assets/viewer.js"></script>
 </body>
 </html>

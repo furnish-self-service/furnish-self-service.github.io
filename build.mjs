@@ -117,7 +117,7 @@ function includes(body, root, ref) {
 
 // The docs: one tree per version; /docs/ goes to the latest.
 const template = readFileSync('src/docs.html', 'utf8');
-for (const version of versions) {
+const trees = versions.map(version => {
   const dir = `${checkout(version)}/docs/site`;
   const pages = readdirSync(dir)
     .filter((f) => f.endsWith('.md'))
@@ -132,38 +132,80 @@ for (const version of versions) {
       const [, front, body] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/) ?? [];
       if (!front) throw new Error(`${dir}/${file}: needs front matter with title and order`);
       const meta = Object.fromEntries(front.split('\n').map((l) => l.split(/:\s*(.*)/s).slice(0, 2)));
-      return { slug: file.replace(/\.md$/, ''), title: meta.title, order: Number(meta.order), body: includes(body, checkout(version), version.ref) };
+      return { group: meta.group, previous: meta.previous, slug: file.replace(/\.md$/, ''), title: meta.title, order: Number(meta.order), body: includes(body, checkout(version), version.ref) };
     })
     .sort((a, b) => a.order - b.order);
+  return { version, dir, pages };
+});
+
+function sectionId(inner) {
+  return inner.replace(/<[^>]+>/g, '').toLowerCase().replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+for (const { version, dir, pages } of trees) {
   const target = `${out}/docs/${version.name}`;
   mkdirSync(target, { recursive: true });
   if (existsSync(`${dir}/images`)) cpSync(`${dir}/images`, `${target}/images`, { recursive: true });
   for (const page of pages) {
-    const nav = pages
-      .map((p) => `<a href="${p.slug}.html"${p === page ? ' aria-current="page"' : ''}>${p.title}</a>`)
-      .join('\n');
-    const options = versions
-      .map((v) => `<option value="../${v.name}/${page.slug}.html"${v === version ? ' selected' : ''}>${v.label}</option>`)
-      .join('');
+    const link = p => `<a href="${p.slug}.html"${p === page ? ' aria-current="page"' : ''}>${p.title}</a>`;
+    const groups = [...new Set(pages.map(p => p.group))];
+    const nav = groups.map(group => {
+      const links = pages.filter(p => p.group === group).map(link).join('\n');
+      return group ? `<details name="guide-group"${page.group === group ? ' open' : ''}><summary>${group}</summary>${links}</details>` : links;
+    }).join('\n');
+    const options = trees.map(tree => {
+      const dest = [page.slug, page.previous, 'index'].find(slug => tree.pages.some(p => p.slug === slug));
+      return `<option value="../${tree.version.name}/${dest}.html"${tree.version === version ? ' selected' : ''}>${tree.version.label}</option>`;
+    }).join('');
     // Links between pages are written as page.md; the site serves page.html.
     const content = marked
       .parse(page.body)
       .replace(/href="([a-z0-9-]+)\.md(#[^"]*)?"/g, 'href="$1.html$2"')
       // Anchors for links like admins.md#reports: the heading's text, lowercase, words joined by "-".
       .replace(/<h([23])>(.*?)<\/h\1>/g, (_, level, inner) => {
-        const id = inner.replace(/<[^>]+>/g, '').toLowerCase().replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        const id = sectionId(inner);
         return `<h${level} id="${id}">${inner}</h${level}>`;
       });
     // "On this page": the page's h2 and h3 headings, with the anchors set above, after the title.
     const headings = [...content.matchAll(/<h([23]) id="([^"]+)">(.*?)<\/h\1>/g)];
-    const toc = headings.length === 0 ? '' : `<nav class="toc" aria-label="On this page"><div><p>On this page</p><ul>${headings
+    const toc = headings.length < 2 ? '' : `<nav class="toc" aria-label="On this page"><div><p>On this page</p><ul>${headings
       .map(([, level, id, inner]) => `<li class="h${level}"><a href="#${id}">${inner.replace(/<(?!\/?code)[^>]+>/g, '')}</a></li>`)
       .join('')}</ul></div></nav>`;
+    // Bookmarks into the former single-page guides follow their section to its new page.
+    const moved = {};
+    for (const child of pages.filter(p => p.previous === page.slug)) {
+      const headings = marked.parse(child.body).matchAll(/<h[23]>(.*?)<\/h[23]>/g);
+      for (const [, heading] of headings) {
+        const id = sectionId(heading);
+        moved[id] = child.slug + '.html#' + id;
+      }
+    }
+    if (page.slug === 'index' && pages.some(p => p.slug === 'furnish-updates')) {
+      moved['switching-from-alpha-to-stable'] = 'furnish-updates.html#switching-from-alpha-to-stable';
+    }
+    if (page.slug === 'endpoint' && pages.some(p => p.slug === 'endpoint-access')) {
+      const configs = `https://github.com/${repository}/tree/${version.ref}/packaging/endpoint`;
+      for (const [proxy, anchors] of Object.entries({
+        caddy: ['add-a-collection'], nginx: ['notes'], traefik: ['how-the-checks-map-to-traefik', 'limits-of-this-variant'],
+        envoy: ['how-it-differs-from-caddy'], haproxy: ['the-idp-39-s-signing-key'],
+        reports: ['start', 'the-dashboard', 'retention', 'another-log-system'],
+      })) {
+        if (proxy !== 'reports') moved[proxy] = configs + '/' + proxy;
+        for (const anchor of anchors) {
+          const fragment = anchor === 'the-idp-39-s-signing-key' ? 'the-idps-signing-key' : anchor;
+          moved[anchor] = configs + '/' + proxy + '#' + fragment;
+        }
+      }
+    }
+    const bookmarks = Object.keys(moved).length
+      ? `<script>const moved = ${JSON.stringify(moved)}; const id = location.hash.slice(1); if (Object.hasOwn(moved, id) && !document.getElementById(id)) location.replace(moved[id]);</script>`
+      : '';
     const html = template
       .replaceAll('{{title}}', page.title)
       .replace('{{preview}}', () => preview(`${page.title} · furnish docs`, `docs/${version.name}/${page.slug}.html`))
       .replace('{{nav}}', nav)
       .replace('{{versions}}', options)
+      .replace('{{bookmarks}}', bookmarks)
       .replace('{{content}}', () => content.replace(/<\/h1>/, (h) => h + toc))
       .replace('{{source}}', `https://github.com/furnish-self-service/furnish/blob/${version.ref}/docs/site/${page.slug}.md`);
     writeFileSync(`${target}/${page.slug}.html`, screenshots(icons(html), `${dir}/images`));

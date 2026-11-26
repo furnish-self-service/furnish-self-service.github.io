@@ -24,7 +24,10 @@ jobs:
       - name: Check out each furnish version
         run: |
           for ref in $(jq -r '.[].ref' versions.json); do
-            git clone -q --depth 1 --branch "$ref" https://github.com/furnish-self-service/furnish.git "furnish/$ref"
+            dir="furnish/$ref"
+            git init -q "$dir"
+            git -C "$dir" fetch -q --depth 1 https://github.com/furnish-self-service/furnish.git "$ref"
+            git -C "$dir" checkout -q --detach FETCH_HEAD
           done
       - uses: actions/setup-node@v4
         with:
