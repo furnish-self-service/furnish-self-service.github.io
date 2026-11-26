@@ -38,7 +38,6 @@
           package manager. The catalog is a git repository on your git server. Larger organizations connect the
           systems they already operate: device management, sign-in, the load balancer and the log system.
         </p>
-        <p><a href="#install">No administrator rights? Install Furnish for your account.</a></p>
         <div class="cta">
           <a class="button primary" href="#install"><icon name="download" />Install Furnish</a>
           <a class="button secondary" href="#small"><icon name="house" />Small teams</a>
@@ -197,7 +196,7 @@
   <span class="k">"body"</span>: <span class="s">"update acme-it/vpn failed"</span>,
   <span class="k">"user.email"</span>: <span class="s">"alice@acme.example"</span>,
   <span class="k">"device.id"</span>: <span class="s">"7f3a91c2e4b0d5f6"</span>,
-  <span class="k">"os.type"</span>: <span class="s">"windows"</span>, <span class="k">"service.version"</span>: <span class="s">"0.1.0+alpha.72"</span>,
+  <span class="k">"os.type"</span>: <span class="s">"windows"</span>, <span class="k">"service.version"</span>: <span class="s">"{{stable-version}}"</span>,
   <span class="k">"furnish.event"</span>: <span class="s">"update"</span>, <span class="k">"furnish.outcome"</span>: <span class="s">"failed"</span>,
   <span class="k">"furnish.app"</span>: <span class="s">"acme-it/vpn"</span>, <span class="k">"furnish.trigger"</span>: <span class="s">"update"</span>,
   <span class="k">"error.message"</span>: <span class="s">"msiexec exited with 1603"</span>
@@ -300,45 +299,40 @@
     <section id="install" class="install">
       <div class="section-head">
         <h2><icon name="download" />Install Furnish</h2>
-        <p>Choose your operating system. Each has a stable download you can install for your account without administrator rights. Catalog apps that change the system may still need IT approval. <a href="docs/{{stable-version}}/index.html#switching-from-alpha-to-stable">Switch from alpha</a>.</p>
+        <p>Choose your operating system to install Furnish for everyone on this computer.</p>
       </div>
       <div class="tabs">
         <input type="radio" name="os" id="t-win" checked /><label for="t-win"><icon name="windows" />Windows</label>
         <input type="radio" name="os" id="t-mac" /><label for="t-mac"><icon name="apple" />macOS</label>
         <input type="radio" name="os" id="t-linux" /><label for="t-linux"><icon name="linux" />Linux</label>
 <div class="panel" id="p-win">
-  <h3>Install for my account</h3>
-  <p class="download"><a class="button primary" href="https://github.com/furnish-self-service/furnish/releases/download/v{{stable-version}}/furnish_{{stable-version}}_windows-x86_64_user-setup.exe"><icon name="download" />Download Windows x64 user setup</a></p>
-  <p>Run the stable installer. It installs the desktop app and command-line tools for your account. The desktop needs WebView2. Run a newer user setup to update. <a href="https://github.com/furnish-self-service/furnish/releases?q=prerelease%3Atrue">Alpha user installers</a>.</p>
   <h3>Install for all users</h3>
-  <p><a href="https://furnish-self-service.github.io/furnish/stable/furnish-windows.msi">Stable Windows x64 MSI</a> · <a href="https://furnish-self-service.github.io/furnish/alpha/furnish-windows.msi">Alpha MSI</a>. Both update through Furnish.</p>
-  <p>The MSI has no publisher certificate. If SmartScreen warns and your organization permits installation, choose <strong>More info → Run anyway</strong>.</p>
+  <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/stable/furnish-windows.msi"><icon name="download" />Download Windows x64 installer (MSI)</a></p>
+  <p>Run the MSI with administrator rights. It installs the desktop app and CLI for everyone on this computer. Furnish updates itself.</p>
+  <p>The installer has no publisher certificate. If SmartScreen warns and your organization permits installation, choose <strong>More info → Run anyway</strong>.</p>
+  <details><summary>Without administrator rights: install for my account</summary>
+  <p>Download and run the <a href="https://github.com/furnish-self-service/furnish/releases/download/v{{stable-version}}/furnish_{{stable-version}}_windows-x86_64_user-setup.exe">Windows x64 current-user installer</a>. The desktop app needs WebView2. Run a newer current-user installer to update.</p></details>
   {{archives-windows}}
 </div>
 <div class="panel" id="p-mac">
-  <h3>Install for my account</h3>
+  <h3>Install for all users</h3>
   <p class="download"><a class="button primary" href="https://furnish-self-service.github.io/furnish/stable/furnish-macos.dmg"><icon name="download" />Download macOS disk image · Apple silicon</a></p>
-  <p>Open the stable disk image and drag <strong>furnish.app</strong> into <code>~/Applications</code>. Create that folder in your home directory if needed. Furnish updates itself. Choose Stable or Alpha in Settings → About, or download the <a href="https://furnish-self-service.github.io/furnish/alpha/furnish-macos.dmg">alpha disk image</a>.</p>
+  <p>Open the disk image and drag <strong>furnish.app</strong> into the computer’s Applications folder (<code>/Applications</code>). Furnish updates itself.</p>
   <p>The app uses ad-hoc signing without Apple notarization. If macOS asks and your organization permits it, allow Furnish under <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>.</p>
-  <details><summary>All users or Homebrew</summary>
-  <p>For all users, drag the app into <code>/Applications</code>. For the stable Homebrew cask, run the command below and update with <code>brew upgrade</code>.</p>
+  <details><summary>Without administrator rights: install for my account</summary>
+  <p>Open the same disk image and drag <strong>furnish.app</strong> into <code>~/Applications</code>. Create the Applications folder in your home directory if needed.</p></details>
+  <details><summary>Install with Homebrew</summary>
+  <p>Install the cask with the command below and update with <code>brew upgrade</code>.</p>
 <pre><code>brew install --cask furnish-self-service/tap/furnish</code></pre></details>
-  <details><summary>Stable source build · Intel Macs</summary>
+  <details><summary>Build from source · Intel Macs</summary>
 <pre><code># needs Xcode's command line tools, Rust and Node.js
 git clone --branch v{{stable-version}} https://github.com/furnish-self-service/furnish.git
 cd furnish/gui &amp;&amp; npm ci &amp;&amp; npm run bundle</code></pre></details>
   {{archives-macos}}
 </div>
 <div class="panel" id="p-linux">
-  <h3>Install for my account</h3>
-  <p class="download"><a class="button primary" href="https://github.com/furnish-self-service/furnish/releases/download/v{{stable-version}}/furnish_{{stable-version}}_linux-x86_64_user.tar.gz"><icon name="download" />Download Linux x86-64 user archive</a></p>
-  <p>From the directory containing the download, run these commands as your own user:</p>
-<pre><code>mkdir -p -m 700 "$HOME/.local/opt"
-tar -xzf furnish_{{stable-version}}_linux-x86_64_user.tar.gz -C "$HOME/.local/opt"
-"$HOME/.local/opt/furnish/bin/furnish-gui"</code></pre>
-  <p>The CLI is alongside the desktop app at <code>bin/furnish</code>. Collections need Git and Git LFS. The desktop uses the system’s GTK 3, WebKitGTK 4.1 and Ayatana AppIndicator libraries. Furnish updates itself from the selected channel. Choose Stable or Alpha in Settings → About, or run <code>bin/furnish self-update</code> to update now. <a href="docs/{{stable-version}}/index.html#linux-current-user-install">Linux install, update and removal guide</a> · <a href="https://github.com/furnish-self-service/furnish/releases?q=prerelease%3Atrue">Alpha user archives</a>.</p>
-  <h3>Install system-wide</h3>
-  <p>The stable package repositories install Furnish system-wide and deliver updates through your package manager. For the alpha channel, use <code>/alpha/</code> in place of <code>/stable/</code> in the repository URL. Pick the commands for your distribution:</p>
+  <h3>Install for all users</h3>
+  <p>Choose your distribution below. On Debian, Ubuntu, Fedora, Enterprise Linux and openSUSE, the Furnish repository delivers updates through your package manager.</p>
   <details open><summary>Debian, Ubuntu and their derivatives</summary>
 <pre><code>sudo install -d /etc/apt/keyrings
 sudo curl -fsSLo /etc/apt/keyrings/furnish.asc https://furnish-self-service.github.io/furnish/gpg-key.asc
@@ -363,6 +357,12 @@ services.furnish.enable = true;
 # furnish's binary cache; without it, Nix builds furnish from source
 nix.settings.extra-substituters = [ "https://furnish.cachix.org" ];
 nix.settings.extra-trusted-public-keys = [ "furnish.cachix.org-1:2kYBYAHpsUEykPAKjJ9a6IlwDPwjnq565I6cPtASA6k=" ];</code></pre></details>
+  <details><summary>Without administrator rights: install for my account</summary>
+  <p>Download the <a href="https://github.com/furnish-self-service/furnish/releases/download/v{{stable-version}}/furnish_{{stable-version}}_linux-x86_64_user.tar.gz">Linux x86-64 user archive</a>. From the directory containing the download, run:</p>
+<pre><code>mkdir -p -m 700 "$HOME/.local/opt"
+tar -xzf furnish_{{stable-version}}_linux-x86_64_user.tar.gz -C "$HOME/.local/opt"
+"$HOME/.local/opt/furnish/bin/furnish-gui"</code></pre>
+  <p>The archive includes the desktop app and CLI and receives signed updates. Collections need Git and Git LFS. The desktop also needs GTK 3, WebKitGTK 4.1 and Ayatana AppIndicator. <a href="docs/{{stable-version}}/index.html#linux-current-user-install">Linux user installation guide</a></p></details>
   {{archives-linux}}
 </div>
       <p class="then">Then add your organization's furnish address or a collection's git URL on the Collections page. To try furnish, add the example collection: <code>furnish collection add https://github.com/furnish-self-service/self-service-example.git</code>.</p>
