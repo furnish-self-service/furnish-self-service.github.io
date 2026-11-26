@@ -92,7 +92,11 @@ for (const version of versions) {
   const pages = readdirSync(dir)
     .filter((f) => f.endsWith('.md'))
     .map((file) => {
-      const text = readFileSync(`${dir}/${file}`, 'utf8');
+      let text = readFileSync(`${dir}/${file}`, 'utf8');
+      // The immutable v0.1.0 tag was written before its downloads went live.
+      if (version.ref === 'v0.1.0' && file === 'index.md') {
+        text = text.replace('follow the stable channel once v0.1.0 is published', 'follow the stable channel');
+      }
       const [, front, body] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/) ?? [];
       if (!front) throw new Error(`${dir}/${file}: needs front matter with title and order`);
       const meta = Object.fromEntries(front.split('\n').map((l) => l.split(/:\s*(.*)/s).slice(0, 2)));
