@@ -61,25 +61,39 @@ function screenshots(html, dir) {
 const repository = 'furnish-self-service/furnish';
 async function releases(path) {
   const headers = process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
-  const response = await fetch(`https://api.github.com/repos/${repository}/releases${path}`, { headers });
-  if (!response.ok) throw new Error(`Reading release assets: HTTP ${response.status}`);
-  return response.json();
+  try {
+    const response = await fetch(`https://api.github.com/repos/${repository}/releases${path}`, { headers, signal: AbortSignal.timeout(15000) });
+    if (response.status === 404 && path === '/latest') return null;
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.warn(`Could not list release assets (${path}): ${error.message}`);
+    return null;
+  }
 }
-const [stable, recent] = await Promise.all([releases('/latest'), releases('?per_page=50')]);
-const alpha = recent.find(r => r.prerelease && !r.draft && /^v[0-9.]+-alpha[.][0-9]+$/.test(r.tag_name));
+async function alphaRelease() {
+  for (let page = 1; ; page++) {
+    const batch = await releases(`?per_page=50&page=${page}`);
+    if (!batch) return null;
+    const alpha = batch.find(r => r.prerelease && !r.draft && /^v[0-9.]+-alpha[.][0-9]+$/.test(r.tag_name));
+    if (alpha || batch.length < 50) return alpha;
+  }
+}
+const [stable, alpha] = await Promise.all([releases('/latest'), alphaRelease()]);
 function archiveLinks(os, suffix, arch) {
   const links = [];
   for (const [channel, release] of [['Stable', stable], ['Alpha', alpha]]) {
     if (!release) continue;
     const version = release.tag_name.slice(1);
-    if (!/^\d+\.\d+\.\d+(?:-alpha\.\d+)?$/.test(version)) throw new Error(`Unexpected version ${version}`);
+    if (!/^\d+\.\d+\.\d+(?:-alpha\.\d+)?$/.test(version)) continue;
     const filename = `furnish_${version}_${suffix}`;
     if (!release.assets.some(asset => asset.name === filename)) continue;
     const base = `https://github.com/${repository}/releases/download/${release.tag_name}`;
     const checksum = release.assets.some(asset => asset.name === 'SHA256SUMS') ? ` · <a href="${base}/SHA256SUMS">SHA-256 checksums</a>` : '';
     links.push(`<li><a href="${base}/${filename}">${channel} · ${os} ${arch} · ${filename.endsWith('.zip') ? 'ZIP' : 'tar.gz'}</a> · ${version}${checksum}</li>`);
   }
-  return links.length ? `<details><summary>Binary archives for packagers · ${arch}</summary><p>CLI and desktop executables for creating your own package. Supply the runtime dependencies and manage updates in your package.</p><ul>${links.join('')}</ul></details>` : '';
+  if (!links.length) links.push(`<li><a href="https://github.com/${repository}/releases">Browse release assets</a> for files ending in <code>${suffix}</code>.</li>`);
+  return `<details><summary>Binary archives for packagers · ${arch}</summary><p>CLI and desktop executables for creating your own package. Supply the runtime dependencies and manage updates in your package.</p><ul>${links.join('')}</ul></details>`;
 }
 
 // The homepage, with the latest version's screenshots.
