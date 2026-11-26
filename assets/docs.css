@@ -230,3 +230,16 @@ article h3 {
     display: none;
   }
 }
+
+.pages details > summary {
+  padding: 0.45rem 0.8rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.pages details a { display: block; margin-left: 0.65rem; }
+@media (min-width: 52.01rem) {
+  .pages { max-height: calc(100vh - 6rem); overflow-y: auto; }
+}
+@media (max-width: 52rem) {
+  .pages:has(details) { display: block; }
+}

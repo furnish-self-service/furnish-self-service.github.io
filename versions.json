@@ -1,5 +1,5 @@
 [
-  {"name": "0.2.0", "label": "0.2.0 (stable)", "ref": "v0.2.0"},
+  {"name": "0.2.0", "label": "0.2.0 (stable)", "ref": "2fa057e0a2213346e1b3673bfffb2dd05e2adfa2"},
   {"name": "0.1.0", "label": "0.1.0", "ref": "v0.1.0"},
   {"name": "alpha", "label": "alpha (main branch)", "ref": "main"}
 ]
